@@ -17,3 +17,5 @@ Technical recipes and notes for technical stuff
 - ansible
 - vagrant
 - packer
+- postgres
+- .net
