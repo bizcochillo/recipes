@@ -19,3 +19,4 @@ Technical recipes and notes for technical stuff
 - packer
 - postgres
 - .net
+- mongo
