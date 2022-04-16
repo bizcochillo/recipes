@@ -10,10 +10,17 @@ Worker Nodes: Host application as containers
 - kube-proxy: manages networking
 ## ETCD
 kubeadm systems: 
+
 ```console
-  kubectl exec etcd-master -n kube-system -- sh -c "ETCDCTL_API=3 etcdctl get / --prefix --keys-only --limit=10 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt  --key /etc/kubernetes/pki/etcd/server.key"
+  kubectl exec etcd-master -n kube-system -- sh -c \
+    "ETCDCTL_API=3 etcdctl get / --prefix --keys-only --limit=10 \
+      --cacert /etc/kubernetes/pki/etcd/ca.crt \
+      --cert /etc/kubernetes/pki/etcd/server.crt  \
+      --key /etc/kubernetes/pki/etcd/server.key"
 ```
+
 non kubeadm systems: 
+
 ```console
   ETCDCTL_API=3 etcdctl get / \
     --prefix --keys-only --limit=10 \
@@ -21,6 +28,7 @@ non kubeadm systems:
     --cert /etc/kubernetes/pki/etcd/server.crt \
     --key /etc/kubernetes/pki/etcd/server.key
 ```
+
 ## kube-apiserver
 
 kubeadm systems: `cat /etc/kubernetes/manifests/kube-apiserver.yaml`
@@ -30,7 +38,7 @@ non kubeadm systems: `cat /etc/systemd/system/kube-apiserver.service`
 ## kube-controller-manager
 watch status of the nodes, remediate situation, node monitor period 5s. Node monitor grace period 40s
 
-kubeadm system: `cat /etc/kubenernetes/manifests/kube-controller-manager.yaml
+kubeadm system: `cat /etc/kubenernetes/manifests/kube-controller-manager.yaml`
 
 non kubeadm systems: `cat /etc/systemd/system/kube-controller-manager.service`
 
@@ -40,25 +48,44 @@ Decides which pod goes to which node.
 kubeadm systems: `cat /etc/kubenernetes/manifests/kube-scheduler`
 
 ## kubelet
+
 Register node, create pods, monitor node and pods
+
 ## kube-proxy
+
 Looks for new services and creates the appropiate network rules. Deployed as a daemon set
+
 ## Pods, ReplicaSets, Deployments
+
 Replication controllers are replaced by replica sets
-replication controller api: v1. 
-replicaset api: apps/v1
+
+replication controller api: `v1`. 
+
+replicaset api: `apps/v1`
+
 selector field is the main difference with replication controller. replicaset can also take pods that are not created by the rs itself
-$ kubectl replace -f <yaml-file>
-$ kubectl scale --replicas=6 -f <yaml-file>
-$ kubectl scale --replicas=6 replicaset myapp-replicaset
+
+`$ kubectl replace -f <yaml-file>`
+
+`$ kubectl scale --replicas=6 -f <yaml-file>`
+
+`$ kubectl scale --replicas=6 replicaset myapp-replicaset`
+
 ## Deployment
+
 See https://kubernetes.io/docs/reference/kubectl/conventions/
+
 ## Namespaces
-<service-name>.<namespace>.svc.cluster.local
+
+`<service-name>.<namespace>.svc.cluster.local`
+
 To set a specific namespace
-$ kubectl config set-context $(kubectl config current-context) --namespace=dev
+
+`$ kubectl config set-context $(kubectl config current-context) --namespace=dev`
+
 To create a resource quota
-```
+
+```yaml
 apiVersion: v1
 kind: ResourceQuota
 metadata:
