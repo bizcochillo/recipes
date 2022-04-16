@@ -10,11 +10,11 @@ Worker Nodes: Host application as containers
 - kube-proxy: manages networking
 ## ETCD
 kubeadm systems: 
-```bash
+```console
   kubectl exec etcd-master -n kube-system -- sh -c "ETCDCTL_API=3 etcdctl get / --prefix --keys-only --limit=10 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt  --key /etc/kubernetes/pki/etcd/server.key"
 ```
 non kubeadm systems: 
-```bash
+```console
   ETCDCTL_API=3 etcdctl get / \
     --prefix --keys-only --limit=10 \
     --cacert /etc/kubernetes/pki/etcd/ca.crt \ 
@@ -22,15 +22,23 @@ non kubeadm systems:
     --key /etc/kubernetes/pki/etcd/server.key
 ```
 ## kube-apiserver
-kubeadm systems: cat /etc/kubernetes/manifests/kube-apiserver.yaml
-non kubeadm systems: cat /etc/systemd/system/kube-apiserver.service
+
+kubeadm systems: `cat /etc/kubernetes/manifests/kube-apiserver.yaml`
+
+non kubeadm systems: `cat /etc/systemd/system/kube-apiserver.service`
+
 ## kube-controller-manager
 watch status of the nodes, remediate situation, node monitor period 5s. Node monitor grace period 40s
-kubeadm system: cat /etc/kubenernetes/manifests/kube-controller-manager.yaml
-non kubeadm systems: cat /etc/systemd/system/kube-controller-manager.service
+
+kubeadm system: `cat /etc/kubenernetes/manifests/kube-controller-manager.yaml
+
+non kubeadm systems: `cat /etc/systemd/system/kube-controller-manager.service`
+
 ## kube-scheduler
 Decides which pod goes to which node. 
-kubeadm systems: cat /etc/kubenernetes/manifests/kube-scheduler
+
+kubeadm systems: `cat /etc/kubenernetes/manifests/kube-scheduler`
+
 ## kubelet
 Register node, create pods, monitor node and pods
 ## kube-proxy
