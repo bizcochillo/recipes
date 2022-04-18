@@ -103,6 +103,7 @@ spec:
 ## Services
 A service is like a virtual server in the node. NodePort is the port from the node itself. Port is the port in the Service (virtual server) and targetPort is the port in the Pod. NodePort rage: 30000-32767
 -- NodePort
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -116,7 +117,10 @@ spec:
   selector:
     app: myapp
     type: front-end
+```
+
 -- ClusterIP
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -129,26 +133,44 @@ spec:
   selector: 
     app: myapp
     type: back-end
+```
 
 ## Imperative-declarative
-$ kubectl edit deployment nginx
-$ kubectl replace -f nginx.yaml
-$ kubectl replace --force -f nginx.yaml
-$ kubectl apply -f .
+`$ kubectl edit deployment nginx`
+
+`$ kubectl replace -f nginx.yaml`
+
+`$ kubectl replace --force -f nginx.yaml`
+
+`$ kubectl apply -f .`
+
 Create a Service named redis-service of type ClusterIP to expose pod redis on port 6379 (This will automatically use the pod's labels as selectors)
-$ kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml
+
+`$ kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml`
+
 Or This will not use the pods labels as selectors, instead it will assume selectors as app=redis. You cannot pass in selectors as an option. So it does not work very well if your pod has a different label set. So generate the file and modify the selectors before creating the service
-$ kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml 
+
+`$ kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml`
+
 Create a Service named nginx of type NodePort to expose pod nginx's port 80 on port 30080 on the nodes. This will automatically use the pod's labels as selectors, but you cannot specify the node port. You have to generate a definition file and then add the node port in manually before creating the service with the pod.
-$ kubectl expose pod nginx --type=NodePort --port=80 --name=nginx-service --dry-run=client -o yaml
+
+`$ kubectl expose pod nginx --type=NodePort --port=80 --name=nginx-service --dry-run=client -o yaml`
+
 Or this will not use the pods labels as selectors
-$ kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run=client -o yaml
+
+`$ kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run=client -o yaml`
+
 Both the above commands have their own challenges. While one of it cannot accept a selector the other cannot accept a node port. I would recommend going with the kubectl expose command. If you need to specify a node port, generate a definition file using the same command and manually input the nodeport before creating the service.
-$ kubectl expose pod redis --port=6379 --name redis-service
+
+`$ kubectl expose pod redis --port=6379 --name redis-service`
+
 Create a new pod called custom-nginx using the nginx image and expose it on container port 8080
-$ kubectl run custom-nginx --image=nginx --port=8080
+
+`$ kubectl run custom-nginx --image=nginx --port=8080`
+
 Create a pod called httpd using the image httpd:alpine in the default namespace. Next, create a service of type ClusterIP by the same name (httpd). The target port for the service should be 80. Try to do this with as few steps as possible.
-$ kubectl run httpd --image=httpd:alpine --port=80 --expose
+
+`$ kubectl run httpd --image=httpd:alpine --port=80 --expose`
 
 # SCHEDULING
 Taint: person. Bug: toleration level
