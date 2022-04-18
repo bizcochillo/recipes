@@ -102,7 +102,8 @@ spec:
 
 ## Services
 A service is like a virtual server in the node. NodePort is the port from the node itself. Port is the port in the Service (virtual server) and targetPort is the port in the Pod. NodePort rage: 30000-32767
--- NodePort
+
+### NodePort
 ```yaml
 apiVersion: v1
 kind: Service
@@ -119,7 +120,7 @@ spec:
     type: front-end
 ```
 
--- ClusterIP
+### ClusterIP
 ```yaml
 apiVersion: v1
 kind: Service
@@ -136,6 +137,7 @@ spec:
 ```
 
 ## Imperative-declarative
+
 `$ kubectl edit deployment nginx`
 
 `$ kubectl replace -f nginx.yaml`
@@ -173,23 +175,39 @@ Create a pod called httpd using the image httpd:alpine in the default namespace.
 `$ kubectl run httpd --image=httpd:alpine --port=80 --expose`
 
 # SCHEDULING
-Taint: person. Bug: toleration level
-DNS SRV query _name._tcp.my-svc.my-ns
+
+Taint: *person*. Bug: *toleration level*
+
+`DNS SRV query _name._tcp.my-svc.my-ns`
+
 To filter by selectors
-$ kubectl get pods --selector env=dev --no-headers | wc -l
+
+`$ kubectl get pods --selector env=dev --no-headers | wc -l`
+
 Node Affinity
-kubectl set pod-selector key=value
-$ kubectl taint nodes <node-name> key=value:TaintEffect (NoSchedule | PreferNoSchedule | NoExecute)
+
+`kubectl set pod-selector key=value`
+
+`$ kubectl taint nodes <node-name> key=value:TaintEffect (NoSchedule | PreferNoSchedule | NoExecute)`
+
 So, add taint:
-  $ kubectl taint node node01 spray=mortein:NoSchedule
+
+`$ kubectl taint node node01 spray=mortein:NoSchedule`
+
 Remove taint:
-  $ kubectl taint node node01 spray=mortein:NoSchedule-
+`$ kubectl taint node node01 spray=mortein:NoSchedule-+ 
+
 In YAML (pod)
+
+```yaml
 nodeSelector:
   label_key: label_value
+```
 Resource request for a container
 - Default 0.5 CPU 256 Mi
 - In YAML (pod)
+
+```yaml
   resources:
     request: 
         memory: "1Gi"
@@ -197,10 +215,14 @@ Resource request for a container
     limits:
         memory: "2Gi"
         cpu: 2
+```
+
 Add label to a node
-  $ kubectl label node node01 color=blue
+
+`$ kubectl label node node01 color=blue`
 
 Resource limitation for containers 
+```yaml
   resources:
       requests:
         memory: "64Mi"
@@ -208,29 +230,46 @@ Resource limitation for containers
       limits:
         memory: "128Mi"
         cpu: "500m"
-An easy way to create a DaemonSet is to first generate a YAML file for a Deployment with the command kubectl create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearch:1.20 -n kube-system --dry-run=client -o yaml > fluentd.yaml. Next, remove the replicas, strategy and status fields from the YAML file using a text editor. Also, change the kind from Deployment to DaemonSet.
+```
+An easy way to create a DaemonSet is to first generate a YAML file for a deployment, for instance:
 
-Finally, create the Daemonset by running kubectl create -f fluentd.yaml
+`kubectl create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearch:1.20 -n kube-system --dry-run=client -o yaml > fluentd.yaml `
+
+Next, remove the replicas, strategy and status fields from the YAML file using a text editor. Also, change the kind from Deployment to DaemonSet.
+
+Finally, create the Daemonset by running 
+
+`kubectl create -f fluentd.yaml`
+
 staticPods (Created directly by kubelet)
+```console
 - kubelet ExecStart = 
     --pod-manifest-parth= ... 
       ... or ...
     --config=kubeconfig.yaml (key staticPodPath
+```
 - to check config 
-  $ ps -aux | grep kubelet
+
+`$ ps -aux | grep kubelet`
 
 # LOGGING AND MONITORING
+
 ## deploy metrics server 
- - Download: git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
- - Install: cd kub<TAB> && kubectl create -f .
+Download: `git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git`
+Install: `cd kub<TAB> && kubectl create -f .`
+
 ## Commands
- - kubectl top node
- - kubectl top pod
+`kubectl top node`
+`kubectl top pod`
+
 ## Logs - Docker
- - To see logs in the container (attach at run) 
-   $ docker run -d <container-image>
-   (container)
-   $ docker logs -f ecf
+To see logs in the container (attach at run) 
+
+`$ docker run -d <container-image>`
+
+(container)
+`$ docker logs -f ecf`
+
 ## Logs kubernetes
  $ kubectl logs -f <pod-name>
  if there are more than one container
