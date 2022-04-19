@@ -255,11 +255,15 @@ staticPods (Created directly by kubelet)
 # LOGGING AND MONITORING
 
 ## deploy metrics server 
+
 Download: `git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git`
+
 Install: `cd kub<TAB> && kubectl create -f .`
 
 ## Commands
+
 `kubectl top node`
+
 `kubectl top pod`
 
 ## Logs - Docker
@@ -268,37 +272,54 @@ To see logs in the container (attach at run)
 `$ docker run -d <container-image>`
 
 (container)
+
 `$ docker logs -f ecf`
 
 ## Logs kubernetes
- $ kubectl logs -f <pod-name>
+ 
+`$ kubectl logs -f <pod-name>`
+  
  if there are more than one container
- $ kubectl logs -f <pod-name> <container-name>
+  
+`$ kubectl logs -f <pod-name> <container-name>`
 
 # APPLICATION LIFECYCLE MANAGEMENT
+
 ## Rollout command (status)
-  $ kubectl rollout status deployment/<deployment-name> 
-  (history)
-  $ kubectl rollout history deployment/<deployment-name>
+
+`$ kubectl rollout status deployment/<deployment-name>`
+
+(history)
+
+`$ kubectl rollout history deployment/<deployment-name>`
+
 ## Deployment Strategy
-  - Recreate or Rolling(default)
+- Recreate or Rolling(default)
   - YAML (deployment)
     strategy: 
       ...
       type: Recreate | RollingUpdate
 ## Create new deployment (kubectl apply at yaml or set)
-  $ kubectl set image deployment/<deployment-name> <image-name>=<image>
+$ kubectl set image deployment/<deployment-name> <image-name>=<image>
 ## Rollback
-  $ kubectl rollout undo deployment/<deployment-name>
-## Commands and arguments
-  FROM ubuntu
-  CMD sleep 5   ==> docker run ubuntu-sleeper sleep 10 
-  ..or..
-  FROM ubuntu
-  CMD ["sleep", "5"]
 
-  FROM ubuntu
-  ENTRYPOINT ["sleep"]  ==> docker run ubuntu-sleeper 10
+$ kubectl rollout undo deployment/<deployment-name>
+## Commands and arguments
+
+```docker
+FROM ubuntu
+CMD sleep 5   ==> docker run ubuntu-sleeper sleep 10 
+```
+  
+..or..
+
+```docker
+FROM ubuntu
+CMD ["sleep", "5"]
+```
+  
+FROM ubuntu
+ENTRYPOINT ["sleep"]  ==> docker run ubuntu-sleeper 10
 
   with default value:
   FROM ubuntu
