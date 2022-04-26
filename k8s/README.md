@@ -851,7 +851,8 @@ provisioner: kubernetes.io/gce-pd
 Storage Classes which make use of no-provisioner do not support dynamic provisioning.
 
 # NETWORK
-## Switching route
+  
+## Switching and routing
 ip link
 ip addr
 ip addr add 192.168.1.10/24 dev eth0
