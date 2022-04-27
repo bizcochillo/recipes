@@ -429,10 +429,13 @@ To add masquerade (server2)
 
 Used by many firewall systems
 
-`# iptables -L`
+`# iptables -L` will show all the rules configured for networking.
+
+`# iptables-save > <filename>` will save the current iptables configuration into a file
+  
+
 
 ## firewall design
-
 
 ## install iptables service
 
