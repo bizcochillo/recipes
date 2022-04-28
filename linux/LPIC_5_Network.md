@@ -470,9 +470,26 @@ It's possible to add a drop rule to the firewall to avoid accepting everything: 
   
   `iptables -F`
   
-  To do not forward any traffic, add `-A FORWARD -j DROP`
+  To do not forward any traffic, add `-A FORWARD -j DROP` to the fwon file
   
 ## install iptables service
+  
+  To install the iptables services and configure the service with the tool
+  
+  `yum install -y iptables-services`
+  
+  Once the service is installed, we can find the configuration at `/etc/sysconfig/iptables`. There we can see the rules. We got another configuration file at `/etc/sysconfig/iptables-config` for configuring the behavior of the service. Pay attention to the setting `IPTABLES_SAVE_ON_RESTART="yes"`.
+  
+  We can replace the firewall for the iptables service: 
+  
+  ```console
+  systemctl stop firewalld.service
+  systemctl enable iptables.service
+  systemctl start iptables.service
+  # We see now that the rules have been imported to iptables 
+  iptables -L
+  ```
 
+  
 # 09 - METHODS TO TUNNEL TRAFFIC
 # 10 - MONITORING THE NETWORK 
