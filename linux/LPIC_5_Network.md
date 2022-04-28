@@ -452,13 +452,26 @@ Used by many firewall systems
 - Save rules on in a file. 
 
 `iptables-save > fwon`
-  
+
+- To restore either of the rules we use `iptables-restore` (toggling firewall on and off)
+ 
+`iptables-restore < fwoff` 
+
+`iptables-restore < fwon`
+
 To show the iptables rule information along with the interfaces 
   
 `iptables -nvL`
   
+It's possible to add a drop rule to the firewall to avoid accepting everything: `-A INPUT -j DROP` is to add in the fwon file. 
 ## firewall design
-
+  
+  To flush the iptables we use. It will drop all rules from the iptables.
+  
+  `iptables -F`
+  
+  To do not forward any traffic, add `-A FORWARD -j DROP`
+  
 ## install iptables service
 
 # 09 - METHODS TO TUNNEL TRAFFIC
