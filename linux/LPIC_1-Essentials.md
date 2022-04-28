@@ -9,9 +9,11 @@ Bring interfaces up
 
 `# nmcli conn up <name>`
 
-Address where configure network when booting. 
+Address where configure network when booting: `/etc/sysconfig/network-scripts/ifcfg-<interface_name, i.e. enp0s3>`. 
 
-`=> /etc/sysconfig/network-scripts/ifcfg-<interface_name, i.e. enp0s3>`
+To enable an specific interface at boot time:
+
+`sed -i s/ONBOOT=no/ONBOOT=yes/ /etc/sysconfig/network-scripts/ifcfg-enp0s8`
 
 ## Installing X
 
