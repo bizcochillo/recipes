@@ -1,21 +1,39 @@
 # 03 - INSTALLING CENTOS 7
+
+## Configuring network
 To show the different network cards
-> nmcli conn show
+
+`# nmcli conn show`
+
 Bring interfaces up
-> nmcli conn up <name>
+
+`# nmcli conn up <name>`
+
 Address where configure network when booting. 
-=> /etc/sysconfig/network-scripts/ifcfg-<interface_name, i.e. enp0s3>
-- Installing X
-For updating the software
-> sudo yum udpate
-For add other utilities
-> yum install -y redhat-lsb-core net-tools epel-release kernel-headers kernel-devel
+
+`=> /etc/sysconfig/network-scripts/ifcfg-<interface_name, i.e. enp0s3>`
+
+## Installing X
+
+Update software
+
+`# sudo yum udpate`
+
+Add other utilities
+
+`# yum install -y redhat-lsb-core net-tools epel-release kernel-headers kernel-devel`
+
 To install group of packages. 
-> yum groupinstall -y "Development Tools"
-> yum groupinstall -y "X Windows System" "MATE Desktop" 
+
+`yum groupinstall -y "Development Tools"`
+
+`yum groupinstall -y "X Windows System" "MATE Desktop" `
+
 To set graphical environment 
-> systemctl set-default graphical.target
-> systemctl isolate graphical.target
+
+`systemctl set-default graphical.target`
+
+`systemctl isolate graphical.target`
  
 # 04 - WORKING AT THE COMMAND LINE
 - Welcome to the command line 
