@@ -429,10 +429,14 @@ To add masquerade (server2)
 
 Used by many firewall systems
 
-`# iptables -L` will show all the rules configured for networking.
+`iptables -L` will show all the rules configured for networking.
 
 *Example*: save firewall off rules (fwoff, no rules). Create few rules and save firewall on (fwon, three rules)
 
+- Save current firewall status
+
+`iptables-save > fwoff`
+  
 - Add an input rule from the localhost interface (lo) for jumping to accept everything (Accept everything coming to the localhost. 
   
 `iptables -A INPUT -i lo -j ACCEPT`
@@ -447,7 +451,7 @@ Used by many firewall systems
 
 - Save rules on in a file. 
 
-`iptables-save fwon`
+`iptables-save > fwon`
   
 To show the iptables rule information along with the interfaces 
   
