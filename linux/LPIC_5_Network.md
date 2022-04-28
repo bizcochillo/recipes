@@ -431,10 +431,28 @@ Used by many firewall systems
 
 `# iptables -L` will show all the rules configured for networking.
 
-`# iptables-save > <filename>` will save the current iptables configuration into a file
+*Example*: save firewall off rules (fwoff, no rules). Create few rules and save firewall on (fwon, three rules)
+
+- Add an input rule from the localhost interface (lo) for jumping to accept everything (Accept everything coming to the localhost. 
   
+`iptables -A INPUT -i lo -j ACCEPT`
+  
+- Add an input rule for a module (connection track) for a connection track states established and related. The traffic will be allow to come back.
+  
+`iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT`
+ 
+- Rule to allow traffic to the port 22
+  
+`iptables -A INPUT -p tcp --dport 22 -j ACCEPT`
 
+- Save rules on in a file. 
 
+`iptables-save fwon`
+  
+To show the iptables rule information along with the interfaces 
+  
+`iptables -nvL`
+  
 ## firewall design
 
 ## install iptables service
