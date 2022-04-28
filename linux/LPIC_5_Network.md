@@ -489,6 +489,12 @@ It's possible to add a drop rule to the firewall to avoid accepting everything: 
   # We see now that the rules have been imported to iptables 
   iptables -L
   ```
+  
+  For adding a new rule at the first position for allowing HTTP traffic 
+  
+  ```console
+  iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
+  ```
 
   
 # 09 - METHODS TO TUNNEL TRAFFIC
