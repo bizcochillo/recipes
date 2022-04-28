@@ -495,7 +495,20 @@ It's possible to add a drop rule to the firewall to avoid accepting everything: 
   ```console
   iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
   ```
-
+  
+  After restarting the service, we can see that new rules remain. 
   
 # 09 - METHODS TO TUNNEL TRAFFIC
+  
+  ## Creating SSH tunels
+  
+  
+  
+  
+  ## Installing openVPN server
+  
+  ## Configuring openVPN server
+  
+  ## Configuring openVNP client
+  
 # 10 - MONITORING THE NETWORK 
