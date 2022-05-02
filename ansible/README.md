@@ -31,3 +31,10 @@ Install Ansible
 ```console
 sudo apt-get install -y ansible
 ```
+
+On the web server, for installing epel-release on CentOS 6.5 we need to modify the repository information as mirrors have been moved since publishing
+On file `/etc/yum.repos.d/CentOS-Base.repo` comment out `mirrorlist` and uncomment `baseurl` and assign the root address to `http://mirror.nsc.liu.se/centos-store/6.5/` instead to `http://mirror.centos.org/centos/$releasever/`. For installing ansible, simply 
+
+```console
+sudo yum install -y ansible
+```
