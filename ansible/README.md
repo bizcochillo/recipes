@@ -24,7 +24,7 @@ To list all running VM with Virtual Box
 
 ```console
 vboxmanage list runningvms
-```va
+```
 
 Install Ansible
 
