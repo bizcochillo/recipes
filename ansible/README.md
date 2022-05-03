@@ -106,3 +106,5 @@ Is equivalent to
 ```console
 ansible all -i inventory -u vagrant "/bin/reboot"
 ``` 
+
+Basic ansible commands `ansible <system> -i <inventoryFile> -m <module> -u <username> -k <password prompt> -v (-vv debug level2 / -vvv debug level3)`
