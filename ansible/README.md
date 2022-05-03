@@ -84,6 +84,13 @@ ansible 192.168.33.20 -i inventory -u vagrant -m ping -k
 ```
 
 For querying the db server: 
+
 ```console
 ansible all -i inventory -u vagrant -m ping -k
+```
+
+For running ansible with level 3 debugging: 
+
+```console
+ansible 192.168.33.20 -i inventory -u vagrant -m ping -k -vvv
 ```
