@@ -32,7 +32,7 @@ Install Ansible on acs (Ubuntu)
 sudo apt-get install -y ansible
 ```
 
-Install Ansible on `web` and `db`. For CentOS systems, the repository package has changed, follow the instructions on (https://proyectoa.com/solucion-al-error-failed-to-download-metadata-for-repo-appstream-en-centos-8/).
+Install Ansible on `web` and `db`. For CentOS systems, the repository package has changed, follow the instructions on (https://proyectoa.com/solucion-al-error-failed-to-download-metadata-for-repo-appstream-en-centos-8/):
   
   - Change the repository references
     
@@ -52,7 +52,38 @@ Install Ansible on `web` and `db`. For CentOS systems, the repository package ha
     ```console
     sudo dnf swap centos-linux-repos centos-stream-repos
     ```   
-    
+On <u>web</u> we can now use yum. First we install epel-release package and the ansible package
+
 ```console
+sudo yum install -y epel-release
 sudo yum install -y ansible
+```
+On <u>db</u> we can install ansible by compiling the python code. First, we make sure that we have gcc and install the python-setuptools (for python2)
+
+```console
+sudo yum install -y gcc
+sudo yum install -y python2
+sudo yum install -y python2-devel
+sudo pip2 install ansible
+```
+
+Exercise 1 is a very simple setup where an inventory file composed by only the IP's of the web and db servers is requested for performing a ping operation, but before, we need to enable password authentication at SSH level (file `/etc/ssh/sshd_config` uncomment the line with `PasswordAuthentication yes` and restart the ssh service with `systemctl restart sshd`. So for setup the exercise: 
+
+```console
+mkdir exercise1 && cd exercise1
+cat <<EOF > inventory
+192.168.33.20
+192.168.33.30
+EOF
+```
+
+For querying the web server:
+
+```console
+ansible 192.168.33.20 -i inventory -u vagrant -m ping -k
+```
+
+For querying the db server: 
+```console
+ansible all -i inventory -u vagrant -m ping -k
 ```
