@@ -67,7 +67,7 @@ sudo yum install -y python2-devel
 sudo pip2 install ansible
 ```
 
-Exercise 1 is a very simple setup where an inventory file composed by only the IP's of the web and db servers is requested for performing a ping operation, but before, we need to enable password authentication at SSH level (file `/etc/ssh/sshd_config` uncomment the line with `PasswordAuthentication yes` and restart the ssh service with `systemctl restart sshd`. So for setup the exercise: 
+Exercise 1 is a very simple setup where an inventory file composed by only the IP's of the web and db servers is requested for performing a ping operation with the ping module (`-m ping`), but before, we need to enable password authentication at SSH level (file `/etc/ssh/sshd_config` uncomment the line with `PasswordAuthentication yes` and restart the ssh service with `systemctl restart sshd`. So for setup the exercise: 
 
 ```console
 mkdir exercise1 && cd exercise1
@@ -94,3 +94,15 @@ For running ansible with level 3 debugging:
 ```console
 ansible 192.168.33.20 -i inventory -u vagrant -m ping -k -vvv
 ```
+
+Other examples for executing a command with the command module
+
+```console
+ansible all -i inventory -u vagrant -m command "/bin/reboot"
+``` 
+
+Is equivalent to 
+
+```console
+ansible all -i inventory -u vagrant "/bin/reboot"
+``` 
