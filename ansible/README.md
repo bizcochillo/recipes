@@ -26,15 +26,33 @@ To list all running VM with Virtual Box
 vboxmanage list runningvms
 ```
 
-Install Ansible
+Install Ansible on acs (Ubuntu)
 
 ```console
 sudo apt-get install -y ansible
 ```
 
-On the web server, for installing epel-release on CentOS 6.5 we need to modify the repository information as mirrors have been moved since publishing
-On file `/etc/yum.repos.d/CentOS-Base.repo` comment out `mirrorlist` and uncomment `baseurl` and assign the root address to `http://mirror.nsc.liu.se/centos-store/6.5/` instead to `http://mirror.centos.org/centos/$releasever/`. For installing ansible, simply 
-
+Install Ansible on `web` and `db`. For CentOS systems, the repository package has changed, follow the instructions on (https://proyectoa.com/solucion-al-error-failed-to-download-metadata-for-repo-appstream-en-centos-8/).
+  
+  - Change the repository references
+    
+    ```console
+    sudo sed -i -e "s|mirrorlist=|#mirrorlist=|g" /etc/yum.repos.d/CentOS-*
+    sudo sed -i -e "s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g" /etc/yum.repos.d/CentOS-*
+    ```
+    
+  - Clean previous cache
+    
+    ```console
+    sudo dnf clean all
+    ```
+    
+  - Update repository
+   
+    ```console
+    sudo dnf swap centos-linux-repos centos-stream-repos
+    ```   
+    
 ```console
 sudo yum install -y ansible
 ```
