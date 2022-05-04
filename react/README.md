@@ -9,3 +9,5 @@ create react app
 To start 
 
 `npm start`
+
+For playing with js code: https://playcode.io/. For view what React is generating https://babeljs.io/
