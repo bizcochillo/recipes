@@ -3,3 +3,8 @@
 ```console
 java -jar jenkins.war --httpPort=PORT_NUMBER --webroot=WEBROOT_PATH
 ```
+
+For instance (with username `admin/admin`), 
+```console
+java -jar jenkins.war --httpPort=18080
+```
