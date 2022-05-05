@@ -108,3 +108,66 @@ ansible all -i inventory -u vagrant "/bin/reboot"
 ``` 
 
 Basic ansible commands `ansible <system> -i <inventoryFile> -m <module> -u <username> -k <password prompt> -v (-vv debug level2 / -vvv debug level3)`
+
+# Inventory and Configuration
+
+Inventory files can contain Behavioral parameters, Groups, Groups of Groups, Assign variables, can be scaled out by using multiple files and can be static or dynamic. We define the items and the variables attached to the host. In the example below we set the host, and the SSH access in plain text. (Filename: `inventory`)
+
+```dosini
+web1 ansible_ssh_host=192.168.33.20 ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+db1 ansible_ssh_host=192.168.33.30 ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+[webservers]
+web1
+db1
+```
+
+We can execute modules (simple ping) for the individual server as follow:
+
+```console
+ansible web1 -i inventory -m ping
+```
+
+And for the group `webservers`:
+
+```console
+ansible webservers -i inventory -m ping
+```
+
+With the keyword `:children` we can use groups of groups. We move `db1` to the `dbservers` group and create a `datacenter` group of groups containing `webservers` and `dbservers` as follow:
+
+```dosini
+web1 ansible_ssh_host=192.168.33.20 ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+db1 ansible_ssh_host=192.168.33.30 ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+
+[webservers]
+web1
+
+[dbservers]
+db1
+
+[datacenter:children]
+webservers
+dbservers
+```
+
+Additionally, we can define variables for using in scope of a group. For this, we use the keyword `:vars`:
+
+```dosini
+web1 ansible_ssh_host=192.168.33.20
+db1 ansible_ssh_host=192.168.33.30
+
+[webservers]
+web1
+
+[dbservers]
+db1
+
+[datacenter:children]
+webservers
+dbservers
+
+[datacenter:vars]
+ansible_ssh_user=vagrant ansible_ssh_pass=vagrant
+```
+
+
