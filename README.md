@@ -20,3 +20,11 @@ Technical recipes and notes for technical stuff
 - postgres
 - .net
 - mongo
+
+# miscelaneous
+
+To create a typeorm migration:
+
+```console
+npx typeorm migration:create -n NAME
+```
