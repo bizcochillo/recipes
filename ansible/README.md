@@ -310,3 +310,5 @@ Ansible modules are the building block that makes automation. There are three ty
 - Yum Module. Same thing for Red Hat-based systems.
 - Service Module. Can stop, start or restart services. Can enable services to start on boot
 
+>*NOTE*: With `ansible-doc -l` we can navigate down and up with the arrows and page 
+
