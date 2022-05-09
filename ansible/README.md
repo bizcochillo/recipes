@@ -312,3 +312,5 @@ Ansible modules are the building block that makes automation. There are three ty
 
 >*NOTE*: With `ansible-doc -l` we can navigate down and up with the arrows and page 
 
+>*NOTE*: After Windows Updates, sometimes VirtualBox losses the connectivity with HostOnly interfaces. The solution described by JustMe has worked: https://stackoverflow.com/questions/33725779/failed-to-open-create-the-internal-network-vagrant-on-windows10 (1. Open Windows Network Connections. 2. Right click on VirtualBox Host only adapter that created. 3. Choose properties. 4. Check "VirtualBox NDIS6 Bridged Networking driver". 5.
+disable and Enable the adapter
