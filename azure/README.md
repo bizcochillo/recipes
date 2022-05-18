@@ -9,7 +9,9 @@ Looking for a blob in a Storage Account with other data than prefix or tag requi
 ```powershell
 $resourceGroupName="<resource_group_name>"
 $storageAccName="<storage_account_name>"
+$containerName="<container_name>"
 $storageAcc=Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccName
 $ctx=$storageAcc.Context
+$containerName="<container_name>"
 Get-AzStorageBlob -Context $ctx -Container $containerName | Where-Object {$_.Name -like "*<test_to_search_for>*"} 
 ```
