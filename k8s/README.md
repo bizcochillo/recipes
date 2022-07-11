@@ -29,6 +29,12 @@ non kubeadm systems:
     --key /etc/kubernetes/pki/etcd/server.key
 ```
 
+To list all keys the ETCD contains, we can issue the command:
+
+```console
+kubectl exec etcd-master -n kube-system etcdctl get / --prefix -keys-only
+```
+
 ## kube-apiserver
 
 kubeadm systems: `cat /etc/kubernetes/manifests/kube-apiserver.yaml`
