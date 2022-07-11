@@ -9,7 +9,7 @@ Worker Nodes: Host application as containers
 - kubelet: manages the nodes
 - kube-proxy: manages networking
 ## ETCD
-kubeadm systems: 
+kubeadm systems  
 
 ```console
   kubectl exec etcd-master -n kube-system -- sh -c \
@@ -37,9 +37,11 @@ kubectl exec etcd-master -n kube-system etcdctl get / --prefix -keys-only
 
 ## kube-apiserver
 
-kubeadm systems: `cat /etc/kubernetes/manifests/kube-apiserver.yaml`
+kubeadm systems (deploys the kubeapi as a pod): `cat /etc/kubernetes/manifests/kube-apiserver.yaml`
 
 non kubeadm systems: `cat /etc/systemd/system/kube-apiserver.service`
+
+Also by looking at the running service like `ps -aux | grep kube-apiserver`
 
 ## kube-controller-manager
 watch status of the nodes, remediate situation, node monitor period 5s. Node monitor grace period 40s
