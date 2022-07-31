@@ -526,28 +526,67 @@ Auth mechanisms: Static Password File, Static Token file, Certificates or Identi
     .. 
     --token-auth-file=user-details.csv
 ## TLS in k8s
-Generate Keys openssl 
-  (CA)
-  $ openssl genrsa -out ca.key 2048
-  (OTHER e.g. admin user)
-  $ openssl genrsa -out admin.key 2048
-Certificate Signing Request
-  (CA)
-  $ openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr 
-  (OTHER e.g. admin user)
-  $ openssl req -new -key admin.key -subj "/CN=kube-admin" -out admin.csr
-Sign Certificates
-  (CA)
-  $ openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
-  (OTHER e.g. admin user)
-  $ openssl x509 -req -in admin.csr -CA ca.crt -CAKey ca.key -out admin.crt
+### Generate Keys openssl 
+  
+#### (CA)
+  
+  ```console
+  openssl genrsa -out ca.key 2048`
+  ```
+  
+#### (OTHER e.g. admin user)
+  
+  ```console
+  openssl genrsa -out admin.key 2048
+  ```
+  
+### Certificate Signing Request
+
+#### (CA)
+  ```console
+  openssl req -new -key ca.key -subj "/CN=KUBERNETES-CA" -out ca.csr 
+  ```
+  
+#### (OTHER e.g. admin user)
+  ```console
+  openssl req -new -key admin.key -subj "/CN=kube-admin" -out admin.csr
+  ```
+  
+### Sign Certificates
+
+#### (CA)
+
+```console
+openssl x509 -req -in ca.csr -signkey ca.key -out ca.crt
+```
+
+#### (OTHER e.g. admin user)
+
+```console
+openssl x509 -req -in admin.csr -CA ca.crt -CAKey ca.key -out admin.crt
+```
 ## View certificate details
-  $ openssl x509 -in <path-to-cert/cert-name.crt> -text -noout
-  (To see errors in logs. etcd as service)
-  $ journalctl -u etcd.service -l
-  (To see errors in logs. etcd as pod)
-  $ kubectl logs etcd-master
-  $ docker logs <container-id>
+
+```console
+openssl x509 -in <path-to-cert/cert-name.crt> -text -noout
+```
+
+(To see errors in logs. etcd as service)
+
+```console
+journalctl -u etcd.service -l
+```
+
+(To see errors in logs. etcd as pod)
+
+```console
+$ kubectl logs etcd-master
+```
+
+```console
+$ docker logs <container-id>
+```
+
 ## Certificates API
   CA cert manages the security by signing CSRs. 
   1. Create CSR object
