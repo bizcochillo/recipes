@@ -513,10 +513,18 @@ ExecStart=/usr/local/bin/etcd \\
 
 # SECURITY
 Accounts: User and Service. We cannot create users but service accounts
-$ kubectl create serviceaccount sa1
-$ kubectl get serviceaccount
+
+```console
+kubectl create serviceaccount sa1
+```
+
+```console
+kubectl get serviceaccount
+```
 
 Auth mechanisms: Static Password File, Static Token file, Certificates or Identity Services
+
+```console
 - Static pass file
   Exec=...kube-apiserver \\
     .. 
@@ -525,6 +533,8 @@ Auth mechanisms: Static Password File, Static Token file, Certificates or Identi
   Exec=...kube-apiserver \\
     .. 
     --token-auth-file=user-details.csv
+```
+
 ## TLS in k8s
 ### Generate Keys openssl 
   
