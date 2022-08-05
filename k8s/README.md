@@ -803,94 +803,130 @@ APIs /metrics, /healthz, /version, /api, /apis, /logs
   ```
 
 ## Cluser Role and Role bindings
-example namespaces resources: pods, replicasets, jobs, deployments, services, secrets, roles, rolebindings, configmaps, pvc
-example non-namespaces resources: nodes, pv, clusterroles, clusterrolebindings, certificatesigningrequests, namespaces
+
+  example namespaces resources: pods, replicasets, jobs, deployments, services, secrets, roles, rolebindings, configmaps, pvc
+
+  example non-namespaces resources: nodes, pv, clusterroles, clusterrolebindings, certificatesigningrequests, namespaces
 
 1. Create Cluste Role
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: cluster-administrator
-rules: 
-- apiGroups: [""]
-  resources: ["nodes"]
-  verbs: ["list", "get", "create", "delete"]
 
-2. Create ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: cluster-admin-role-binding
-subjects:
-- kind: User
-  name: cluster-user
-  apiGroup: rbac.authorization.k8s.io
-roleRef:
+  ```yaml
+  apiVersion: rbac.authorization.k8s.io/v1
   kind: ClusterRole
-  name: cluster-administrator
-  apiGroup: rbac.authorization.k8s.io
-
+  metadata:
+    name: cluster-administrator
+  rules: 
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["list", "get", "create", "delete"]
+  ```
+  
+2. Create ClusterRoleBinding
+  
+  ```yaml
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: ClusterRoleBinding
+  metadata:
+    name: cluster-admin-role-binding
+  subjects:
+  - kind: User
+    name: cluster-user
+    apiGroup: rbac.authorization.k8s.io
+  roleRef:
+    kind: ClusterRole
+    name: cluster-administrator
+    apiGroup: rbac.authorization.k8s.io
+  ```
+  
 ## Service Accounts
-Used by apps. To create
-$ kubectl create serviceaccount <name>
-Creates a token automatically. It's stored as a secret object. To view the token (Stored in a secret object)
-$ kubectl describe secret dashboard-sa-token-kbbdm
-If the app is within the cluster, the secret can be mount within the pod. A default service account is always created for every namespace
-We can establish pod service account with serviceAccountName: key
+  Used by apps. To create a service account:
+  
+  ```console 
+  kubectl create serviceaccount <name>
+  ```
+  
+  Creates a token automatically. It's stored as a secret object. To view the token (Stored in a secret object):
+  ```console 
+  kubectl describe secret dashboard-sa-token-kbbdm
+  ```
+  
+  If the app is within the cluster, the secret can be mount within the pod. A default service account is always created for every namespace
+  We can establish pod service account with serviceAccountName: key
 
 ## Image Security
-Image structure access: Registry / Username / Image
-Create docker credentials
-$ kubectl create secret docker-registry regcred \
+  
+  Image structure access: Registry / Username / Image
+
+  Create docker credentials
+  ```console
+  kubectl create secret docker-registry regcred \
     --docker-server= private-regist \
     --docker-username=  \
     --docker-password=  \
-    --docker-email=     \
-In pod definition spec: key imagePullSecrets: -name: regcred
+    --docker-email=     
+  ```
+  
+  In pod definition 
+  ```yaml
+  spec: 
+    imagePullSecrets: 
+    - name: regcred
+  ```
+  
 ## Security Contexts
-Settings in the container will override settings in the pod
-spec:
-  securityContext:
-    runAsUser: 1000
-.. for capabilities..
-spec:
-  containers:
-    ..
+  Settings in the container will override settings in the pod
+  
+  ```yaml
+  spec:
     securityContext:
       runAsUser: 1000
-      capabilities:
-        add: ["MAC_ADMIN"]
+  .. for capabilities..
+  spec:
+    containers:
+      ..
+      securityContext:
+        runAsUser: 1000
+        capabilities:
+          add: ["MAC_ADMIN"]
+  ```
+  
 ## Network policy
-A network policy is an object in k8s. 
-Example ingress policy
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: db-policy
-spec:
-  policyTypes:
-  - Ingress
+  A network policy is an object in k8s. 
+  Example ingress policy
+  
+  ```yaml
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: db-policy
+  spec:
+    policyTypes:
+    - Ingress
+    ingress:
+    - from: 
+      - podSelector:
+          matchLabels:
+            name: api-pod
+      ports:
+      - protocol: TCP
+        port: 3306
+  ```
+  
+  Network solution should support network policy
+  selectors: podSelector and namespaceSelector (matchLabels), ipBlock (cidr). For instance
+  ```yaml
   ingress:
   - from: 
     - podSelector:
         matchLabels:
           name: api-pod
-    ports:
-    - protocol: TCP
-      port: 3306
-Network solution should support network policy
-selectors: podSelector and namespaceSelector (matchLabels), ipBlock (cidr). For instance
-ingress:
-- from: 
-  - podSelector:
-      matchLabels:
-        name: api-pod
-    namespaceSelector:
-      matchLabels:
-        name: prod
-  - ipBlock:
-      cidr: 192.168.5.10/32
-
+      namespaceSelector:
+        matchLabels:
+          name: prod
+    - ipBlock:
+        cidr: 192.168.5.10/32
+  ```
+  
 # STORAGE
 ## Storage in Docker
 Docker install its data on /var/lib/docker (aufs, containers, image, volumes)
