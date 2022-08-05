@@ -635,7 +635,8 @@ $ docker logs <container-id>
   
   (for base64)
   ```console
-  cat jane.csr | openssl enc -A -base64    
+  cat jane.csr | openssl enc -A -base64
+  ```
   
   2. Review Requests
   
