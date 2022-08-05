@@ -3,6 +3,7 @@
 2. [SCHEDULING](#SCHEDULING)
 3. [APPLICATION LIFECYCLE MANAGEMENT](#APPLICATION-LIFECYCLE-MANAGEMENT)
 4. [CLUSTER MAINTENANCE](#CLUSTER-MAINTENANCE)
+5. [SECURITY](#SECURITY)
 
 # CORE CONCEPTS
 ## Cluster architecture
@@ -606,48 +607,83 @@ $ docker logs <container-id>
 ## Certificates API
   CA cert manages the security by signing CSRs. 
   1. Create CSR object
-    $ openssl genrsa -out jane.key 2048
-    $ openssl -new -key jane.key -subj "/CN=jane" -out jane.csr
-    (Create yaml file with base64 encoded CSR)
-    apiVersion: certificates.k8s.io/v1
-    kind: CertificateSigningRequest
-    metadata:
-      name: jane
-    spec:
-      groups:
-      - system:authenticated
-      usages:
-      - digital signature
-      - key encipherment
-      - server auth
-      signerName: kubernetes.io/kube-apiserver-client
-      request: <BASE64 of CSR>
-    (for base64)
-    $ cat jane.csr | openssl enc -A -base64    
+  
+  ```console  
+  openssl genrsa -out jane.key 2048
+  ```
+  
+  ```console
+  openssl -new -key jane.key -subj "/CN=jane" -out jane.csr
+  ```
+  (Create yaml file with base64 encoded CSR)
+  
+  ```yaml
+  apiVersion: certificates.k8s.io/v1
+  kind: CertificateSigningRequest
+  metadata:
+    name: jane
+  spec:
+    groups:
+    - system:authenticated
+    usages:
+    - digital signature
+    - key encipherment
+    - server auth
+    signerName: kubernetes.io/kube-apiserver-client
+    request: <BASE64 of CSR>
+  ```
+  
+  (for base64)
+  ```console
+  cat jane.csr | openssl enc -A -base64    
+  
   2. Review Requests
-    $ kubectl get csr
+  
+  ```console
+  kubectl get csr
+  ```
+  
   3. Approve Requests
-    $ kubectl certificate approve jane
+  
+  ```console
+  kubectl certificate approve jane
+  ```
+  
   4. Share Certs to Users
+  
   (Deny an agent request)
-  $ kubectl certificate deny agent-smith
+  ```console
+  kubectl certificate deny agent-smith
+  ```
+  
   (Delete a certificate signing request)
-  $ kubectl delete csr agent-smith
+  
+  ```console
+  kubectl delete csr agent-smith
+  ```
+  
 ## KubeConfig
   (Example of API query)
-  $ curl https://my-kubernetes-cluster:6443/api/v1/pods \
-     --key admin.key
-     --cert admin.crt
-     --cacert ca.crt
+  ```console
+  curl https://my-kubernetes-cluster:6443/api/v1/pods \
+   --key admin.key
+   --cert admin.crt
+   --cacert ca.crt
+  ```
+  
   (with kubectl)
-  $ kubectl get pods
-     --server my-kubernetes-cluster:6443
-     --client-key admin.key
-     --client-certificate admin.crt
-     --certificate-authority ca.crt
+  ```console
+  kubectl get pods
+   --server my-kubernetes-cluster:6443
+   --client-key admin.key
+   --client-certificate admin.crt
+   --certificate-authority ca.crt
+  ```
+  
   All that info goes to $HOME/.kube/config
   KubeConfig has three sections: Clusters, Contexts, Users (Cluster: google, User:dev, context: dev@google)
-  >>
+  
+  ```yaml
   apiVersion: v1
   kind: Config
   current-context: my-cluster-admin@my-cluster
@@ -668,70 +704,103 @@ $ docker logs <container-id>
       client-certificate: admin.crt
       client-key: admin.key
   <<EOF
+  ```
   
   To see the configuration
-  $ kubectl config view
-  To get the current context
-  $ kubectl config current-context --kubeconfig=<path-to-kubeconfig>
+  
+  ```console
+  kubectl config view
+  ```
+    To get the current context
+  
+  ```console
+  kubectl config current-context --kubeconfig=<path-to-kubeconfig>
+  ```
+  
   To set other context
-  $ kubectl config use-context <context-name> --kubeconfig=<path-to-kubeconfig>
-
+  ```console
+  kubectl config use-context <context-name> --kubeconfig=<path-to-kubeconfig>
+  ```
 ## API Groups, Authorization, Role Based Access Controls
 APIs /metrics, /healthz, /version, /api, /apis, /logs
+  
   core => api/ v1 => pods, pvc, serviceaccounts, etc
+  
   named => apis/ => /apps, /extensions, /networking.k8s.io, /storage.k8s.io, /authentication.k8s.io, /certificates.k8s.io
-$ curl http://localhost:6443 -k
-(Start a proxy which uses the credentials in kubeconfig)
-$ kubectl proxy 
 
-Authorization: Node, ABAC, RBAC, Webhook. To set the auth, in ExecStart of kube-apiserver=> --authorization-mode=Node,RBAC,Webhook
-Create a RBAC (developer-role.yaml)
-1. Create a Role definition
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: developer
-rules: 
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["list", "get", "create", "update", "delete"]
-2. Create a Role binding
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: devuser-developer-binding
-subjects:
-- kind: User
-  name: dev-user
-  apiGroup: rbac.authorization.k8s.io
-roleRef:
+  ```console
+  curl http://localhost:6443 -k
+  ```
+  
+  Start a proxy which uses the credentials in kubeconfig:
+  ```console
+  kubectl proxy 
+  ```
+  
+  Authorization: Node, ABAC, RBAC, Webhook. To set the auth, in ExecStart of kube-apiserver=> `--authorization-mode=Node,RBAC,Webhook`
+  
+  Create a RBAC (developer-role.yaml)
+  1. Create a Role definition
+  
+  ```yaml
+  apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
-  name: developer
-  apiGroup: rbac.authorization.k8s.io
+  metadata:
+    name: developer
+  rules: 
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list", "get", "create", "update", "delete"]
+  ```
+  
+  2. Create a Role binding
+  
+  ```yaml
+  apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: devuser-developer-binding
+  subjects:
+  - kind: User
+    name: dev-user
+    apiGroup: rbac.authorization.k8s.io
+  roleRef:
+    kind: Role
+    name: developer
+    apiGroup: rbac.authorization.k8s.io
+  ```
+  
+  ```console
+  kubectl get roles
+  kubectl get rolebindings
+  kubectl describe role developer
+  ```
+    
+  - Check Access: can-i
+  ```console
+  kubectl auth can-i create deployments
+  kubectl auth can-i delete nodes
 
-$ kubectl get roles
-$ kubectl get rolebindings
-$ kubectl describe role developer
-- Check Access: can-i
-$ kubectl auth can-i create deployments
-$ kubectl auth can-i delete nodes
-- Check Access: impersonation
-$ kubectl auth can-i create deployments --as dev-user
-$ kubectl auth can-i delete nodes --as dev-user
-$ kubectl auth can-i delete nodes --as dev-user --namespace test
-$ kubectl auth can-i watch pod/dark-blue-app --namespace blue --as dev-user 
-
+  - Check Access: impersonation
+  ```console
+  kubectl auth can-i create deployments --as dev-user
+  kubectl auth can-i delete nodes --as dev-user
+  kubectl auth can-i delete nodes --as dev-user --namespace test
+  kubectl auth can-i watch pod/dark-blue-app --namespace blue --as dev-user 
+  ```
 ## Docker registry
-apiVersion: v1
-kind: Pod
-metadata:
-  name: private-reg
-spec:
-  containers:
-  - name: private-reg-container
-    image: <your-private-image>
-  imagePullSecrets:
-  - name: regcred
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: private-reg
+  spec:
+    containers:
+    - name: private-reg-container
+      image: <your-private-image>
+    imagePullSecrets:
+    - name: regcred
+  ```
 
 ## Cluser Role and Role bindings
 example namespaces resources: pods, replicasets, jobs, deployments, services, secrets, roles, rolebindings, configmaps, pvc
