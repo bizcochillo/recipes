@@ -7,14 +7,19 @@
 
 # CORE CONCEPTS
 ## Cluster architecture
+
 Master: Manages, Plan, Schedule, Monitor Nodes
+
 - ETCD Key value DB
 - kube-scheduler: put workloads in a node
 - Controllers (controller-manager, node-controller, replication-controller)
 - kube-apiserver: responsible for all operations within the cluster
+
 Worker Nodes: Host application as containers
+
 - kubelet: manages the nodes
 - kube-proxy: manages networking
+
 ## ETCD
 kubeadm systems  
 
