@@ -814,6 +814,18 @@ APIs /metrics, /healthz, /version, /api, /apis, /logs
   example namespaces resources: pods, replicasets, jobs, deployments, services, secrets, roles, rolebindings, configmaps, pvc
 
   example non-namespaces resources: nodes, pv, clusterroles, clusterrolebindings, certificatesigningrequests, namespaces
+  
+  To see a full list of namespaces resources
+  
+  ```console
+  kubectl api-resources --namespaced=true
+  ```
+  
+  And non namespaced resources:
+  
+  ```console
+  kubectl api-resources --namespaced=false
+  ```
 
 1. Create Cluste Role
 
@@ -828,7 +840,7 @@ APIs /metrics, /healthz, /version, /api, /apis, /logs
     verbs: ["list", "get", "create", "delete"]
   ```
   
-2. Create ClusterRoleBinding
+2. Create ClusterRoleBinding  
   
   ```yaml
   apiVersion: rbac.authorization.k8s.io/v1
