@@ -781,7 +781,8 @@ APIs /metrics, /healthz, /version, /api, /apis, /logs
   ```console
   kubectl auth can-i create deployments
   kubectl auth can-i delete nodes
-
+  ```
+  
   - Check Access: impersonation
   ```console
   kubectl auth can-i create deployments --as dev-user
