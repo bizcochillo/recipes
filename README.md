@@ -21,7 +21,7 @@ Technical recipes and notes for technical stuff
 - .net
 - mongo
 
-# miscelaneous
+## Appendix: nodeJS typeorm migrations
 
 To create a typeorm migration:
 
@@ -29,19 +29,19 @@ To create a typeorm migration:
 npx typeorm migration:create -n NAME
 ```
 
-Display the last error on Unix
+## Appendix: Display the last error on Unix
 
 ```console
 echo $?
 ```
 
-Get the request information in cURL
+## Appendix: Get the request information in cURL
 
 ```console
 curl -I <http-address>
 ```
 
-To change the language of Brother printers (Firmware configuration change):
+## Appendix: To change the language of Brother printers (Firmware configuration change):
 
 1. Switch on printer
 2. Hold during several seconds the Home button on the printer option display. 
@@ -49,3 +49,9 @@ To change the language of Brother printers (Firmware configuration change):
 4. Select the menu `74` and press afterwards `Mono start`
 5. Introduce the language code (`0066` for Iberian/Italian or `0015` for Spanish depending of the page loaded) and wait until the printer stores the option. 
 6. Restart the printer by introducing `99`
+
+## Appendix: ffmpeg links
+
+https://stackoverflow.com/questions/21184014/ffmpeg-converted-mp4-file-does-not-play-in-firefox-and-chrome
+https://stackoverflow.com/questions/58506549/videos-which-dont-play-in-firefox-how-to-detect-and-how-to-fix
+https://stackoverflow.com/questions/38489231/ffmpegphp-videos-modified-by-ffmpeg-are-not-played-in-firefox
