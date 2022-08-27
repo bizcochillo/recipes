@@ -55,3 +55,44 @@ curl -I <http-address>
 https://stackoverflow.com/questions/21184014/ffmpeg-converted-mp4-file-does-not-play-in-firefox-and-chrome
 https://stackoverflow.com/questions/58506549/videos-which-dont-play-in-firefox-how-to-detect-and-how-to-fix
 https://stackoverflow.com/questions/38489231/ffmpegphp-videos-modified-by-ffmpeg-are-not-played-in-firefox
+
+## OpenSSL 
+
+To generate a new Certificate Signing Request
+
+```console
+openssl req -newkey rsa:2048 -keyout <output-key-file> -out <output-csr-file>
+```
+
+To query all information about a Certificate Signing request or an x509 certificate
+
+CSR:
+
+```console
+openssl req -in <input-csr-file> -text -noout
+```
+
+x509:
+
+```console
+openssl x509 -in <input-crt-file> -text -noout
+```
+
+To query only the subject of a CSR and x509 certificate
+
+CSR:
+
+```console
+openssl req -in <input-csr-file> -subject -noout
+```
+
+x509:
+```console
+openssl x509 -in <input-crt-file> -subject -noout
+```
+
+To query only the expiration date of a x509 certificate
+
+```console
+openssl x509 -in <input-crt-file> -enddate -noout
+```
