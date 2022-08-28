@@ -96,3 +96,44 @@ To query only the expiration date of a x509 certificate
 ```console
 openssl x509 -in <input-crt-file> -enddate -noout
 ```
+
+## Appendix: OpenSSH and connect with RSA private key
+
+On the server host, enable the SSH server (Not enabled by default in Ubuntu clients)
+
+```console
+sudo apt update
+sudo apt install openssh-server
+```
+
+Check status of SSH server
+
+```console
+sudo systemctl status ssh
+```
+
+Enable SSH port over firewall
+
+```console
+sudo ufw allow ssh
+```
+
+For connecting over SSH and private key
+
+on client host, generate a RSA key for connecting
+
+```console
+ssh-keygen -t rsa -b 4096
+```
+
+After generating the keys, copy it to the remote host by using `ssh-copy-id`. Once prompted for the remote host server credentials, the authorized public key will be copied to the list. 
+
+```console
+ssh-copy-id <user>@<host>
+```
+
+Connect to user at host from the client host: 
+
+```console
+ssh abel@ale-laptop2
+```
