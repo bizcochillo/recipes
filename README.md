@@ -138,7 +138,7 @@ Connect to user at host from the client host:
 ssh abel@ale-laptop2
 ```
 
-## Apendix Ghostscript and pdftk
+## Appendix: Ghostscript and pdftk
 
 To compress a PDF file using GS (Windows x64)
 
