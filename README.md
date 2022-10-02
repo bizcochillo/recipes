@@ -137,3 +137,17 @@ Connect to user at host from the client host:
 ```console
 ssh abel@ale-laptop2
 ```
+
+## Apendix Ghostscript and pdftk
+
+To compress a PDF file using GS (Windows x64)
+
+```console
+gswin64 -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=<OUTPUT_FILE_NAME>.pdf <INPUT_FILE_NAME>.pdf
+```
+
+To concatenate several PDF files
+
+```console
+pdftk <file_1.pdf> <file_2.pdf> ... <file_N.pdf> cat output <output_file.pdf>
+```
