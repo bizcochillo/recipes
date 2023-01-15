@@ -38,31 +38,55 @@ To set graphical environment
 `systemctl isolate graphical.target`
  
 # 04 - WORKING AT THE COMMAND LINE
-- Welcome to the command line 
+## Welcome to the command line
+  
 Physical TTY (real console) 
+
 Local Pseudo TTY (graphical environment console) 
+
 Remote Pseudo TTY (SSH) 
-- Accessing consoles
+
+## Accessing consoles
+
 Ctrl + Alt + F1 (Main graphical console) 
+
 Ctrl + Alt + F2-F6 (Physical console)
+
 To show which console you are log on
-> tty 
+
+`tty`
+
 To show who is logged on on the system
-> who
-* Listing files
+
+`who`
+
+## Listing files
+
 To show how aliased is a command
-> type ls 
+
+`type ls`
+
 To show all files
-> ls -a 
+
+`ls -a`
+
 To show all files with a / at the end for directories. 
-> ls -aF
+
+`ls -aF`
+
 light blue for links and with -F it gets a decorator with @ at the end of filename
+
 For showing reverse order add a r. If the r is added and it's followed by a -t it shows the most recent file added sorted. 
-> ls -lrt
+`ls -lrt`
+
 With -h for the human readable format. 
-> ls -lhrt
-To show only the directory 
-> ls -ld /etc
+
+`ls -lhrt
+
+To show only the directory (Modificator `d`)
+
+`ls -ld /etc
+
 * File types
 To show the devices on the system
 > lsblk
