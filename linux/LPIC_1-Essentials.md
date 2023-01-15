@@ -81,20 +81,26 @@ For showing reverse order add a r. If the r is added and it's followed by a -t i
 
 With -h for the human readable format. 
 
-`ls -lhrt
+`ls -lhrt`
 
 To show only the directory (Modificator `d`)
 
-`ls -ld /etc
+`ls -ld /etc`
 
-* File types
+## File types
+
 To show the devices on the system
-> lsblk
+
+`lsblk`
+
 To list the files which represents partitions or devices
-> ls -l /dev/sda
-> ls -l /dev/sda*
-> ls -l /dev/sda?
-> ls -l /dev/sda[12]
+```console
+ls -l /dev/sda
+ls -l /dev/sda*
+ls -l /dev/sda?
+ls -l /dev/sda[12]
+```
+
 To show different files with one ls 
 > ls -l /etc/system-release /etc/centos-release /etc/redhat-release
 To show the content of the release in CentOS
