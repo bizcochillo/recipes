@@ -3,39 +3,57 @@
 ## Configuring network
 To show the different network cards
 
-`# nmcli conn show`
+```console
+# nmcli conn show`
+```
 
 Bring interfaces up
 
-`# nmcli conn up <name>`
+```console
+# nmcli conn up <name>
+```
 
 Address where configure network when booting: `/etc/sysconfig/network-scripts/ifcfg-<interface_name, i.e. enp0s3>`. 
 
 To enable an specific interface at boot time:
 
-`sed -i s/ONBOOT=no/ONBOOT=yes/ /etc/sysconfig/network-scripts/ifcfg-enp0s8`
+```console
+sed -i s/ONBOOT=no/ONBOOT=yes/ /etc/sysconfig/network-scripts/ifcfg-enp0s8
+```
 
 ## Installing X
 
 Update software
 
-`# sudo yum udpate`
+```console
+sudo yum udpate
+```
 
 Add other utilities
 
-`# yum install -y redhat-lsb-core net-tools epel-release kernel-headers kernel-devel`
+```console
+yum install -y redhat-lsb-core net-tools epel-release kernel-headers kernel-devel
+```
 
 To install group of packages. 
 
-`yum groupinstall -y "Development Tools"`
+```console
+yum groupinstall -y "Development Tools"
+```
 
-`yum groupinstall -y "X Windows System" "MATE Desktop" `
+```console
+yum groupinstall -y "X Windows System" "MATE Desktop" 
+```
 
 To set graphical environment 
 
-`systemctl set-default graphical.target`
+```console
+systemctl set-default graphical.target
+```
 
-`systemctl isolate graphical.target`
+```console
+systemctl isolate graphical.target
+```
  
 # 04 - WORKING AT THE COMMAND LINE
 ## Welcome to the command line
@@ -48,52 +66,70 @@ Remote Pseudo TTY (SSH)
 
 ## Accessing consoles
 
-Ctrl + Alt + F1 (Main graphical console) 
+`Ctrl + Alt + F1` (Main graphical console) 
 
-Ctrl + Alt + F2-F6 (Physical console)
+`Ctrl + Alt + F2-F6` (Physical console)
 
 To show which console you are log on
 
-`tty`
+```console
+tty
+```
 
 To show who is logged on on the system
 
-`who`
+```console
+who
+```
 
 ## Listing files
 
 To show how aliased is a command
 
-`type ls`
+```console
+type ls
+```
 
 To show all files
 
-`ls -a`
+```console
+ls -a
+```
 
-To show all files with a / at the end for directories. 
+To show all files with a / at the end for directories (light blue for links and with -F it gets a decorator with @ at the end of filename). 
 
-`ls -aF`
-
-light blue for links and with -F it gets a decorator with @ at the end of filename
+```console
+ls -aF
+```
 
 For showing reverse order add a r. If the r is added and it's followed by a -t it shows the most recent file added sorted. 
-`ls -lrt`
+
+```console
+ls -lrt
+```
 
 With -h for the human readable format. 
 
-`ls -lhrt`
+```console
+ls -lhrt
+```
 
 To show only the directory (Modificator `d`)
 
-`ls -ld /etc`
+```console
+ls -ld /etc
+```
 
 ## File types
 
 To show the devices on the system
 
-`lsblk`
+```console
+lsblk
+```
 
 To list the files which represents partitions or devices
+
 ```console
 ls -l /dev/sda
 ls -l /dev/sda*
@@ -102,44 +138,101 @@ ls -l /dev/sda[12]
 ```
 
 To show different files with one ls 
-> ls -l /etc/system-release /etc/centos-release /etc/redhat-release
+
+```console
+ls -l /etc/system-release /etc/centos-release /etc/redhat-release
+```
+
 To show the content of the release in CentOS
-> cat /etc/redhat-release
-> lsb_release -d
+
+```console 
+cat /etc/redhat-release
+lsb_release -d
+```
+
 To query the install database
-> rpm -qf /usr/bin/lsb_release
-> rpm -qf $(which lsb_release)
-* Working with files
+
+```console
+rpm -qf /usr/bin/lsb_release
+rpm -qf $(which lsb_release)
+```
+
+## Working with files
+
 To enable interactive mode by copying, add -i modifier
-> cp -i /etc/hosts .
-* Working with Directories
+
+```console
+cp -i /etc/hosts .
+```
+
+## Working with Directories
+
 To create a directory with the parent 
-> mkdir -p sales/test 
+
+```console
+mkdir -p sales/test 
+```
+
 Delete directory with rmdir
-> rmdir test
+
+```console
+rmdir test
+```
+
 Last command with filtering
+
+```console
 !rm
+```console
+
 To remove recursively and the files 
-> rm -rf sales
+
+```console
+rm -rf sales
+```
+
 To create several directories with one command
-> mkdir one two
+
+```console
+mkdir one two
+```
+
 To create a several files
-> touch one/file{1..5}
+```console
+touch one/file{1..5}
+```
+
 To copy one directory and all its content to another
-> cp -R one two
+```console
+cp -R one two
+```
+
 To add permissions (read-write-execution) to user/group/others we need to add the m modifier when creating a folder
-> mkdir -m 777 d1
-> mkdir -m 700 d2 
-* Working with links
-Hard link count in the ls -l
-to create a link
-> ln f1 f2
+```console
+mkdir -m 777 d1
+mkdir -m 700 d2 
+```
+
+## Working with links
+
+Hard link count in the ls -l. To create a link
+
+```console
+ln f1 f2
+```
+
 to print the index number of a file or directory add a modifier -i 
-> ls -li <dir>
-With symbolic links we can access accross file system. However with hard links we can share data in the same file system
-> ln -s /boot/vmlinuz-3<etc> . [ALLOWED]
-> ln /boot/vmlinuz-3<etc> . [NOT ALLOWED]
-* Summary
+
+```console
+ls -li <dir>
+```
+
+ With symbolic links we can access accross file system. However with hard links we can share data in the same file system
+
+```console
+ln -s /boot/vmlinuz-3<etc> . [ALLOWED]
+ln /boot/vmlinuz-3<etc> . [NOT ALLOWED]
+```
 
 # 05 - READING FILES
 * Reading from files
