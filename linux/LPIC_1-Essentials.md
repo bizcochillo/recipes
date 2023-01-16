@@ -4,7 +4,7 @@
 To show the different network cards
 
 ```console
-# nmcli conn show`
+# nmcli conn show
 ```
 
 Bring interfaces up
