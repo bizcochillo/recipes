@@ -580,67 +580,156 @@ sudo echo '127.0.0.1 bob' | sudo tee -a /etc/hosts
 
 # 08 - ARCHIVING FILES
 
-* Using the tar commands
-To create a tar file 
-> tar -cf doc.tar /usr/share/doc
-To add a verbose switch
-> tar -cvf doc.tar /usr/share/doc
-To add even more verbosity
-> tar -cvvf doc.tar /usr/share/doc
-To list the files that are in an archive. 
-> tar --list --file=doc.tar
-Same output
-> tar -tf doc.tar
-To extract a file in the current location
-> tar --extract --verbose -f doc.tar
-In a directory
-> tar --extract --verbose -f doc.tar --directory=/
-Incremental backup: only the files that have changed since last backup. 
-- To create a tar snapshot and perform incremental backups
-> tar -cvf my0.tar -g my.snar test
-Add some new content to one existing files in the snapshot and createa new one
-> echo hi >> test/hosts
-> tar -cvf my1.tar -g my.snar test
-Remove files and create a new snapshot
-> rm test/hostname
-> tar -cvf my2.tar -g my.snar test
-Extract different snapshots
-> tar -xvf my0.tar -g /dev/null
-> tar -xvf my1.tar -g /dev/null
-> tar -xvf my2.tar -g /dev/null
-* Using compression
-To compress a tar file (and remove it) 
-> gzip tux.tar
-To see the file type
-> file tux.tar.gzip
-To unzip the file. 
-> gunzip tux.tar.gzip
-To zip with a better algorithm
-> bzip2 tux.tar
-To see which format the file has. 
->  file tux.tar.bz2
-To unzip 
-> bunzip2 tux.tar.bz2
-To compress and add time
-> (for normal archiving) time tar -cvf tux.tar $HOME
-> (for zip)  time tar -cvzf tux.tar.gz $HOME (add z) 
-> (for bzip2) time tar -cvjf tux.tar.bz2 $HOME (add j)
-* Working with cpio
-To compress
-> find -name '*.pdf' | cpio -o > /tmp/pdf.cpio
-To expand
-> cpio -id < /tmp/pdf.cpio
-Also for compressing. It's usually the format for the image boot
-* Imaging with dd
-To create an image
-> dd if=/dev/sr0 of=netinstall.iso
-Copy the first block of the MBR
-> dd if=/dev/sda of=sda.mbr count=1 bs=512
+## Using the tar commands
 
+To create a tar file 
+
+```console
+tar -cf doc.tar /usr/share/doc
+```
+
+To add a verbose switch
+
+```console
+tar -cvf doc.tar /usr/share/doc
+```
+                               
+To add even more verbosity
+
+```console 
+tar -cvvf doc.tar /usr/share/doc
+```
+
+To list the files that are in an archive. 
+```console
+tar --list --file=doc.tar
+```
+
+Same output
+
+```console
+tar -tf doc.tar
+```
+
+To extract a file in the current location
+
+```console
+tar --extract --verbose -f doc.tar
+```
+                               
+In a directory
+
+```console
+tar --extract --verbose -f doc.tar --directory=/
+```
+
+Incremental backup: only the files that have changed since last backup. To create a tar snapshot and perform incremental backups
+
+```console
+tar -cvf my0.tar -g my.snar test
+```
+
+Add some new content to one existing files in the snapshot and createa new one
+
+```console
+echo hi >> test/hosts
+tar -cvf my1.tar -g my.snar test
+```
+
+Remove files and create a new snapshot
+
+```console
+rm test/hostname
+tar -cvf my2.tar -g my.snar test
+```
+
+Extract different snapshots
+
+```console
+tar -xvf my0.tar -g /dev/null
+tar -xvf my1.tar -g /dev/null
+tar -xvf my2.tar -g /dev/null
+```
+
+## Using compression
+To compress a tar file (and remove it) 
+
+```console
+gzip tux.tar
+```
+
+To see the file type
+
+```console
+file tux.tar.gzip
+```
+
+To unzip the file. 
+
+```console
+gunzip tux.tar.gzip
+```
+
+To zip with a better algorithm
+
+```console
+bzip2 tux.tar
+```
+
+To see which format the file has. 
+
+```console
+file tux.tar.bz2
+```
+
+To unzip 
+
+```console
+bunzip2 tux.tar.bz2
+```
+
+To compress and add time
+
+```console
+(for normal archiving) time tar -cvf tux.tar $HOME
+(for zip)  time tar -cvzf tux.tar.gz $HOME (add z) 
+(for bzip2) time tar -cvjf tux.tar.bz2 $HOME (add j)
+```
+
+## Working with cpio
+
+To compress
+
+```console
+find -name '*.pdf' | cpio -o > /tmp/pdf.cpio
+```
+
+To expand
+
+```console
+cpio -id < /tmp/pdf.cpio
+```
+                        
+Also for compressing. It's usually the format for the image boot
+
+## Imaging with dd
+To create an image
+
+```console
+ dd if=/dev/sr0 of=netinstall.iso
+```
+ 
+Copy the first block of the MBR
+
+```console
+dd if=/dev/sda of=sda.mbr count=1 bs=512
+```
 # 09 - ACCESSING COMMAND LINE HELP
 
 ## Working with man pages
+
 man section numbers 
+
 ```console
 man man
        1   Executable programs or shell commands
@@ -655,30 +744,56 @@ man man
        9   Kernel routines [Non standard]
 ```
 
-> man crontab
+```console
+man crontab
+```
+
 File format for crontab
-> man 5 crontab
+
+```console
+man 5 crontab
+```
 
 ## Working with info pages
 
-> info ls
+```console
+info ls
+ ```
 
 ## Using version control systems
 
 We can check in the version (creates a ,v file)
-> ci hello.sh
+
+```console
+ci hello.sh
+```
+ 
 To see the version
-> rlog -b hello.sh
+
+```console
+rlog -b hello.sh
+```
+
 To checkout the file (-l for lock). End comment with dot (.)
-> co -l hello.sh
+
+```console
+co -l hello.sh
+```
+
 To checkout a specific version
-> co -l -r1.1 hello.sh
+```console
+co -l -r1.1 hello.sh
+```
 To revert back to that version
-> ci -f hello.sh
+
+```console
+ci -f hello.sh
+```
 
 # 10 - UNDERSTANDING FILE PERMISSIONS
 
 ## Listing permissions
+
 To show the file system type
 > df -hT
 To see the filesystem mounted we can use mount
