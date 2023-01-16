@@ -4,13 +4,13 @@
 To show the different network cards
 
 ```console
-# nmcli conn show
+nmcli conn show
 ```
 
 Bring interfaces up
 
 ```console
-# nmcli conn up <name>
+nmcli conn up <name>
 ```
 
 Address where configure network when booting: `/etc/sysconfig/network-scripts/ifcfg-<interface_name, i.e. enp0s3>`. 
