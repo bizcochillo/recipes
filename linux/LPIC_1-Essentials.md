@@ -868,7 +868,7 @@ To set permissions with chmod
 ```console
 chmod 467 file1
 chmod u=r,g=rw,o=rwx file1
-```console
+```
  
 To add execution permission to a file
 
