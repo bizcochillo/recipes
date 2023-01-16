@@ -183,7 +183,7 @@ Last command with filtering
 
 ```console
 !rm
-```console
+```
 
 To remove recursively and the files 
 
