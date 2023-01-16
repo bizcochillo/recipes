@@ -795,144 +795,314 @@ ci -f hello.sh
 ## Listing permissions
 
 To show the file system type
-> df -hT
-To see the filesystem mounted we can use mount
-> mount | grep root
-Stat command for listing permissions. (User, Group and Others)
-> stat hello.sh,v
-To extract the simbolic permissions
-> stat -c %A hello.sh,v
-To extract the octal description
-> stat -c %a hello.sh,v
 
+```console
+df -hT
+```
+
+To see the filesystem mounted we can use mount
+
+```console
+mount | grep root
+```
+
+Stat command for listing permissions. (User, Group and Others)
+
+```console
+stat hello.sh,v
+```
+
+To extract the simbolic permissions
+
+```console
+stat -c %A hello.sh,v
+```
+
+To extract the octal description
+
+```console
+stat -c %a hello.sh,v
+```
+ 
 ## Managing Default permissions
 
 Mask by default by creating a file
-> umask
-Set writable for all groups
-> umask 0
-Set only to groups
-> umask 27 
-Set only to user
-> umask 77
-Equivalent for human readable umask (rw-r--r--.)
-> umask u=rwx,g=rx,o=rx 
-Set groups and others to nothing (Equivalent to 0077) 
-> umask u=rwx,go=
 
+```console
+umask
+```
+ 
+Set writable for all groups
+
+```console
+umask 0
+```
+ 
+
+Set only to groups
+ 
+```console
+umask 27 
+```
+ Set only to user
+
+```console
+umask 77
+```
+ 
+Equivalent for human readable umask (rw-r--r--.)
+
+```console
+umask u=rwx,g=rx,o=rx 
+```
+
+Set groups and others to nothing (Equivalent to 0077) 
+
+```console
+umask u=rwx,go=
+``` 
 ## Setting Permissions
 
 To set permissions with chmod
-> chmod 467 file1 
-> chmod u=r,g=rw,o=rwx file1
-To add execution permission to a file
-> chmod a+x file2
-To remove permission from a file
-> chmod a-x file2
-We can group permissions
-> chmod go= file2
-The fourth group includes the sticky bit, the group id bit and the userid bit
-- Sticky bit controls deletions from the directory (t => execution permissions is set, T=> not set) 
-> ls -ld /tmp
-To create a directory with the sticky bit
-> mkdir -m 1777 test
-To remove the sticky bit
-> chmod o-t test
-Group ID bit (s). (Wall is set message to users, to terminals) When the command runs, it runs with the permission of the group
-> ls -l $(which wall)
-User Id bit set (for instance). It executes as root, enabling users to change the their own password
-> ls -l $(which passwd)
 
+```console
+chmod 467 file1
+chmod u=r,g=rw,o=rwx file1
+```console
+ 
+To add execution permission to a file
+
+```console
+chmod a+x file2
+```
+
+To remove permission from a file
+
+```console
+chmod a-x file2
+```
+
+We can group permissions
+
+```console
+chmod go= file2
+```
+
+The fourth group includes the sticky bit, the group id bit and the userid bit. Sticky bit controls deletions from the directory (t => execution permissions is set, T=> not set) 
+
+```console
+ls -ld /tmp
+```
+
+To create a directory with the sticky bit
+
+```console
+mkdir -m 1777 test
+```
+
+ To remove the sticky bit
+
+```console
+chmod o-t test
+```
+ 
+Group ID bit (s). (Wall is set message to users, to terminals) When the command runs, it runs with the permission of the group
+
+```console 
+ls -l $(which wall)
+```
+ 
+ User Id bit set (for instance). It executes as root, enabling users to change the their own password
+
+```console
+ > ls -l $(which passwd)
+```
+ 
 ## Managing File ownership
 
 To see the id
-> id -u
-To see the id (name)
-> id -un
-To see the group (name) primary group
-> id -gn
-Complementary group 
-> id -Gn
-To change the group of a file
-> chgrp wheel file2
-To change the primary group
-> newgrp wheel
-(Primary group: create resources. Secondary group: accessing resources)
-To change the owner
-> chown root file2
-To change user and group
-> chown tux.tux file2
-Copy file changing ownership of user who copies 
-> cp file2 /root/file2na
-Copy file keeping original ownership
-> cp -a file2 /root/file2a
 
+```console
+id -u
+```
+
+To see the id (name)
+
+```console
+id -un
+```
+ 
+To see the group (name) primary group
+
+```console
+id -gn
+```
+  
+ Complementary group 
+
+```console
+id -Gn
+```
+ 
+To change the group of a file
+
+```console
+chgrp wheel file2
+```
+ 
+To change the primary group
+
+```console
+newgrp wheel
+```
+ 
+(Primary group: create resources. Secondary group: accessing resources). To change the owner
+
+```console
+chown root file2
+```
+ 
+ To change user and group
+
+```console 
+chown tux.tux file2
+```
+ 
+Copy file changing ownership of user who copies 
+
+```console 
+cp file2 /root/file2na
+```
+ 
+ Copy file keeping original ownership
+
+```console
+cp -a file2 /root/file2a
+```
+ 
 # 11 - ACCESSING THE ROOT ACCOUNT
 
 ## Using su
 
-> su
-> id
+```console
+su
+id
+```
+ 
 Creates a new bash shell and stays with the current user.
-> echo $USER
-Dollar is a sign that the logged user is regular user. To add full access with the account context root
-> su -l 
 
+```console 
+echo $USER
+```
+ 
+ Dollar is a sign that the logged user is regular user. To add full access with the account context root
+
+```console
+su -l 
+```
+ 
 ## Implementing sudo
 
 Five minuts period is keep the auth. To see the sudo parameters
-> sudo visudo
-User_Alias and Command_Alias for host and commands allowed
-For showing the options
-> sudo sudo -V 
 
+```console 
+ > sudo visudo
+```
+ 
+User_Alias and Command_Alias for host and commands allowed. For showing the options
+
+```console
+ > sudo sudo -V 
+```
+ 
 ## Restricting root access to SSH
 
 To access as root
-> ssh -l root 192.168.56.102
-To edit the options for ssh connection
-> vi /etc/ssh/sshd_config
-(Edit PermitRootAccess to no)
-restart the SSH daemon
-> systemctl restart ssh
 
+```console
+ssh -l root 192.168.56.102
+```
+ 
+ To edit the options for ssh connection
+
+```console 
+vi /etc/ssh/sshd_config
+(Edit PermitRootAccess to no)
+```
+ 
+restart the SSH daemon
+
+```console
+systemctl restart ssh
+```
+ 
 # 12 - ACCESSING SERVERS WITH SSH
 
 ## Configuring SSH client
 
-For the known hosts: cat .ssh/known_hosts
-config the ssh access based on alias on config file into ~/.ssh/config file
+For the known hosts: `cat .ssh/known_hosts`
+config the ssh access based on alias on config file into `~/.ssh/config` file
 
 ## Using key based auth
 
 To generate a key
-> ssh-keygen -t rsa
+
+```console
+ssh-keygen -t rsa
+```
+ 
 To copy the key to the server 
-> ssh-copy-id -i id_rsa.pub server2
-> ssh server2
+
+```console
+ssh-copy-id -i id_rsa.pub server2
+ssh server2
+```
+ 
 And the target machine has the keys on 
-> cat .ssh/authorized_keys
-Configure password restriction (PermitRootAccess) at /etc/ssh/sshd_config
+
+```console
+cat .ssh/authorized_keys
+```
+ 
+Configure password restriction (PermitRootAccess) at `/etc/ssh/sshd_config`
 
 ## Copy files securely
 
-> scp /etc/hosts server2:/tmp
+```console
+scp /etc/hosts server2:/tmp
+```
+ 
 In the opposite direction
-> scp server2:/tmp/hosts .
+
+```console
+scp server2:/tmp/hosts .
+```
 
 # 13 - USING SCREEN AND SCRIPT
 
 ## Using script as collaboration
 
 To records the session
-> script
+ 
+```console
+script
 ...
-> exit
-Script to another window
-> mkpipe /tmp/mypipe
-> script -f /tmp/mypipe
-> (other machine) cat /tmp/mypipe
 
+exit
+```
+ 
+Script to another window
+
+```console
+mkpipe /tmp/mypipe
+script -f /tmp/mypipe
+(other machine) cat /tmp/mypipe
+```
+ 
 ## Running screen
-> yum install -y screen
+
+```console
+yum install -y screen
+```
+
 Needs ssh setup
