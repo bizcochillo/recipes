@@ -534,29 +534,52 @@ this is a little
 file that we can crete
 even with scripts
 ```
+
 ## Command pipelines
 
 Command cut to extract delimiters from a file 
+ 
+```console
 [tux@server1 ~]$ head -n1 /etc/passwd
 root:x:0:0:root:/root:/bin/bash
 [tux@server1 ~]$ cut -f7 -d: /etc/passwd
 /bin/bash
 /sbin/nologin
+```
+ 
 Sort & unique commands
+
+```console
 cut -f7 -d: /etc/passwd | sort | uniq
-* Named pipes
+```
+ 
+## Named pipes
+
 To create a pipe
-> mkfifo mypipe
+
+```console
+mkfifo mypipe
 ls -F mypipe
 (from one terminal) ls > mypipe
 (from the other) wc -l < mypipe
-* Using the command tee
+```
+                               
+## Using the command tee
+
 To redirect output to file and screen
-> ls | tee f89
+
+```console
+ls | tee f89
+```
+
 Hand over sudo command append with tee
+
+```console
 sudo echo '127.0.0.1 bob' | sudo tee -a /etc/hosts
+```
 
 # 08 - ARCHIVING FILES
+
 * Using the tar commands
 To create a tar file 
 > tar -cf doc.tar /usr/share/doc
