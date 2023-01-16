@@ -392,35 +392,74 @@ find /boot -size +10000k -type f -exec du -h {} \;
 ```
 
 # 06 - USING THE VIM TEXT EDITOR
-* Creating and editing files in Linux and using touch
-To create a new file
-> touch newfile
-We can use redirecting
-> >newfile1 
-To see statistics about the file
-> stat newfile
-To change the date of the file 
->  touch -d '10 April 1973' newfile
-* Using the nano Text Editor
-nano not part of the minimal install
-> sudo yum install -y nano
-* Learning vim with vimtutor
-> vimtutor
-To see the vim help: :help
-* Editing files with vim
-add .vimrc. :set showmode nonumber nohlsearch 
-autoindent: set ai
-tab separator: set ts=4
-spaces instead of tab: set expandtab
-Set macro => nmap <C-N> :set invnumber<CR>
-abbreviation=> abbr _sh #!/bin/bash
-Revert to the last saved changed => :e!
-Editing mode(insert and append) => iIaA 
-Copy lines: yy 2yy
-Paste lines: p
 
+## Creating and editing files in Linux and using touch
+
+To create a new file
+
+```console
+touch newfile
+```
+
+We can use redirecting
+
+```console
+>newfile1 
+```
+
+To see statistics about the file
+
+```console
+stat newfile
+```
+
+To change the date of the file 
+
+```console
+touch -d '10 April 1973' newfile
+```
+
+## Using the nano Text Editor
+
+nano not part of the minimal install
+
+```console
+sudo yum install -y nano
+```
+
+## Learning vim with vimtutor
+
+```console
+vimtutor
+```
+
+To see the vim help: `:help`
+
+## Editing files with vim
+
+add .vimrc: `set showmode nonumber nohlsearch`
+
+autoindent: `:set ai`
+
+tab separator: `:set ts=4`
+
+spaces instead of tab: `:set expandtab`
+
+Set macro => nmap <C-N> `:set invnumber<CR>`
+ 
+abbreviation=> abbr _sh `#!/bin/bash`
+ 
+Revert to the last saved changed => `:e!`
+ 
+Editing mode(insert and append) => `iIaA`
+ 
+Copy lines: `yy` `2yy`
+ 
+Paste lines: `p`
+ 
 # 07 - PIPING AND REDIRECTION
-* Redirecting STDOUT
+
+## Redirecting STDOUT
 to redirect explicitly the stdout  
 > df -h 1> file1
 * Using the noclobber option
