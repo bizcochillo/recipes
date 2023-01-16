@@ -460,32 +460,70 @@ Paste lines: `p`
 # 07 - PIPING AND REDIRECTION
 
 ## Redirecting STDOUT
+ 
 to redirect explicitly the stdout  
-> df -h 1> file1
-* Using the noclobber option
-For protecting overwriting
-To see shell options
-> set -o 
+
+```console 
+df -h 1> file1
+``` 
+
+ Using the noclobber option for protecting overwriting. To see shell options
+
+```console
+set -o 
+```
+ 
 To turn noclobber on
-> set -o noclobber
+ 
+```console
+set -o noclobber
+```
+  
 I can overwrite by adding a safety bar
-> date +%F >| file1
-Add to home directory  (vi .bashrc) 
-To disable noclobber again
-> set +o noclobber
-* Redirecting STDERR
+
+```console
+date +%F >| file1
+```
+ 
+It can be added to home directory  (vi .bashrc). To disable noclobber again
+
+```console
+set +o noclobber
+```
+ 
+## Redirecting STDERR
+
 To redirect standard error
-> ls /etcw 2>| err
+
+```console
+ls /etcw 2>| err
+```
+ 
 To avoid permission denied messages clutter the output
-> find /etc -type l 2> /dev/null
+
+```console
+find /etc -type l 2> /dev/null
+```
+ 
 Standard output and standard error
-> find /etc -type l &> err.txt
-* Redirecting into STDIN
+
+```console
+find /etc -type l &> err.txt
+```
+ 
+## Redirecting into STDIN
+
 To see the file system information and send an mail
-> df -hlT > diskfree
-> main -s "Disk Free" < diskfree
-* Using HERE documents
+
+```console
+df -hlT > diskfree
+main -s "Disk Free" < diskfree
+```
+## Using HERE documents
+
 To write in a file until I find the word END
+
+```console
 [tux@server1 ~]$ cat > mynewfile <<END
 > this is a little
 > file that we can crete
@@ -495,8 +533,10 @@ To write in a file until I find the word END
 this is a little
 file that we can crete
 even with scripts
-* Command pipelines
-command cut to extract delimiters from a file 
+```
+## Command pipelines
+
+Command cut to extract delimiters from a file 
 [tux@server1 ~]$ head -n1 /etc/passwd
 root:x:0:0:root:/root:/bin/bash
 [tux@server1 ~]$ cut -f7 -d: /etc/passwd
