@@ -638,9 +638,11 @@ Copy the first block of the MBR
 > dd if=/dev/sda of=sda.mbr count=1 bs=512
 
 # 09 - ACCESSING COMMAND LINE HELP
-* Working with man pages
+
+## Working with man pages
 man section numbers 
-> man man
+```console
+man man
        1   Executable programs or shell commands
        2   System calls (functions provided by the kernel)
        3   Library calls (functions within program libraries)
@@ -651,12 +653,18 @@ man section numbers
            man(7), groff(7)
        8   System administration commands (usually only for root)
        9   Kernel routines [Non standard]
+```
+
 > man crontab
 File format for crontab
 > man 5 crontab
-* Working with info pages
+
+## Working with info pages
+
 > info ls
-* Using version control systems
+
+## Using version control systems
+
 We can check in the version (creates a ,v file)
 > ci hello.sh
 To see the version
@@ -669,7 +677,8 @@ To revert back to that version
 > ci -f hello.sh
 
 # 10 - UNDERSTANDING FILE PERMISSIONS
-* Listing permissions
+
+## Listing permissions
 To show the file system type
 > df -hT
 To see the filesystem mounted we can use mount
@@ -680,7 +689,9 @@ To extract the simbolic permissions
 > stat -c %A hello.sh,v
 To extract the octal description
 > stat -c %a hello.sh,v
-* Managing Default permissions
+
+## Managing Default permissions
+
 Mask by default by creating a file
 > umask
 Set writable for all groups
@@ -693,7 +704,9 @@ Equivalent for human readable umask (rw-r--r--.)
 > umask u=rwx,g=rx,o=rx 
 Set groups and others to nothing (Equivalent to 0077) 
 > umask u=rwx,go=
-* Setting Permissions
+
+## Setting Permissions
+
 To set permissions with chmod
 > chmod 467 file1 
 > chmod u=r,g=rw,o=rwx file1
@@ -715,7 +728,8 @@ Group ID bit (s). (Wall is set message to users, to terminals) When the command 
 User Id bit set (for instance). It executes as root, enabling users to change the their own password
 > ls -l $(which passwd)
 
-* Managing File ownership
+## Managing File ownership
+
 To see the id
 > id -u
 To see the id (name)
@@ -739,20 +753,26 @@ Copy file keeping original ownership
 > cp -a file2 /root/file2a
 
 # 11 - ACCESSING THE ROOT ACCOUNT
-* Using su
+
+## Using su
+
 > su
 > id
 Creates a new bash shell and stays with the current user.
 > echo $USER
 Dollar is a sign that the logged user is regular user. To add full access with the account context root
 > su -l 
-* Implementing sudo
+
+## Implementing sudo
+
 Five minuts period is keep the auth. To see the sudo parameters
 > sudo visudo
 User_Alias and Command_Alias for host and commands allowed
 For showing the options
 > sudo sudo -V 
-* Restricting root access to SSH
+
+## Restricting root access to SSH
+
 To access as root
 > ssh -l root 192.168.56.102
 To edit the options for ssh connection
@@ -762,10 +782,14 @@ restart the SSH daemon
 > systemctl restart ssh
 
 # 12 - ACCESSING SERVERS WITH SSH
-* Configuring SSH client
+
+## Configuring SSH client
+
 For the known hosts: cat .ssh/known_hosts
 config the ssh access based on alias on config file into ~/.ssh/config file
-* Using key based auth
+
+## Using key based auth
+
 To generate a key
 > ssh-keygen -t rsa
 To copy the key to the server 
@@ -774,13 +798,17 @@ To copy the key to the server
 And the target machine has the keys on 
 > cat .ssh/authorized_keys
 Configure password restriction (PermitRootAccess) at /etc/ssh/sshd_config
-* Copy files securely
+
+## Copy files securely
+
 > scp /etc/hosts server2:/tmp
 In the opposite direction
 > scp server2:/tmp/hosts .
 
 # 13 - USING SCREEN AND SCRIPT
-* Using script as collaboration
+
+## Using script as collaboration
+
 To records the session
 > script
 ...
@@ -789,6 +817,7 @@ Script to another window
 > mkpipe /tmp/mypipe
 > script -f /tmp/mypipe
 > (other machine) cat /tmp/mypipe
-* Running screen
+
+## Running screen
 > yum install -y screen
 Needs ssh setup
