@@ -248,7 +248,7 @@ To cat two files
 
 ```console
 cat /etc/hosts /etc/hostname
-```console
+```
 
 To count lines
 
