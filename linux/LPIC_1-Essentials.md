@@ -235,62 +235,161 @@ ln /boot/vmlinuz-3<etc> . [NOT ALLOWED]
 ```
 
 # 05 - READING FILES
-* Reading from files
+
+## Reading from files
+
 To show data about the SSH connection
-    > echo $SSH_CONNECTION 
+
+```console
+echo $SSH_CONNECTION 
+```
+
 To cat two files
-    > cat /etc/hosts /etc/hostname
+
+```console
+cat /etc/hosts /etc/hostname
+```console
+
 To count lines
-    > wc -l /etc/services
-To see files (last argument) 
-    > less !$ 
-/<search for forward)
-?<search for backwards)
+
+```console
+wc -l /etc/services
+```
+
+To see files (last argument) (`/` for searching forward) and `?` for searching for backwards)
+
+```console
+less !$ 
+```
+
 To see top 10 lines
-> head -n 10 /etc/services
+
+```console
+head -n 10 /etc/services
+```
+
 To see top n lines
-> head -n <number of lines> /etc/services
+
+```console
+head -n <number of lines> /etc/services
+```
+
 To see last 10 lines
-> tail /etc/services
+
+```console
+tail /etc/services
+```
+
 To see last n lines
-> tail -n <number of lines> /etc/services
-* Regular Expressions and grep
+
+```console
+tail -n <number of lines> /etc/services
+```
+
+## Regular Expressions and grep
+
 To filter with pipe
-> yum list installed | grep kernel
-> yum list installed | grep ^kernel
+
+```console
+yum list installed | grep kernel
+yum list installed | grep ^kernel
+```
+
 Install network time protocol
-> sudo yum install ntp 
+
+```console
+sudo yum install ntp 
+```
+
 To match with a whole workd 'server'
-> grep '\bserver\b' ntp.conf
-* Using sed to Edit files
+
+```console
+grep '\bserver\b' ntp.conf
+```
+
+## Using sed to Edit files
+
 To see output when sed is executed
-> sed '/^#/d ; /^$/d' ntp.conf
+
+```console
+sed '/^#/d ; /^$/d' ntp.conf
+```
+
 To actually edit the file (add parameter -i)
-> sed -i '/^#/d ; /^$/d' ntp.conf 
-* Comparing files
+
+```console
+sed -i '/^#/d ; /^$/d' ntp.conf 
+```
+
+## Comparing files
+
 To compare two files
-> diff ntp.conf ntp.new
+
+```console
+diff ntp.conf ntp.new
+```
+
 To compare binary files
-> rpm -V ntp
+
+```console
+rpm -V ntp
+```
+
 To compare binary files we can compare checksum
-> md5sum /usr/bin/passwd
-* Finding files
+
+```console
+md5sum /usr/bin/passwd
+```
+
+## Finding files
+
 To find files in a directory using file name
-> find /usr/share/doc -name '*.pdf' 
+
+```console
+find /usr/share/doc -name '*.pdf' 
+```
+
 The default action is to print in the screen. 
-> find /usr/share/doc -name '*.pdf' -print
+
+```console
+find /usr/share/doc -name '*.pdf' -print
+```
+
 To execute a command with the retrieved file. 
-> find /usr/share/doc -name '*.pdf' -exec {} . \;
+
+```console
+find /usr/share/doc -name '*.pdf' -exec {} . \;
+```
+
 To delete de found files
-> find -name '*.pdf' -delete
+
+```console
+find -name '*.pdf' -delete
+```
+
 To find the symbolic links
-> find /etc -type l
+
+```console
+find /etc -type l
+```
+
 To limit the depth of the search 
-> find /etc -maxdepth 1 -type l
+
+```console
+find /etc -maxdepth 1 -type l
+```
+
 To find files larger than 20M 
-> find /boot -size +20000k -type f
+
+```console
+find /boot -size +20000k -type f
+```
+
 To see the disk size of files which are larger than 10M
-> find /boot -size +10000k -type f -exec du -h {} \;
+
+```console
+find /boot -size +10000k -type f -exec du -h {} \;
+```
 
 # 06 - USING THE VIM TEXT EDITOR
 * Creating and editing files in Linux and using touch
