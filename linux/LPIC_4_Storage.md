@@ -1,48 +1,95 @@
-01 - INTRODUCTION
-* Listing Block Storage
+# 01 - INTRODUCTION
+
+## Listing Block Storage
+
 To list disk blocks
 $ lsblk
 sr0 is the CD rom. lvm is a logica volume. swap is virtual memory. MAJ and MIN numbers are really important. Maj number indicated the version number of the driver that the kernel is using to access the disk. 
 The driver allows up to 15 partitions per disk. No matter if we're using MBR partitions or GUI, that allows up to 128, but the limitation comes from the driver. 
 
-02 - PARTITIONING DISKS
-* Partitioning Linux disks
+# 02 - PARTITIONING DISKS
+
+## Partitioning Linux disks
+
+```console
 DISK -> 
 	MBR Partition Table 2TB (maximum partition table) ->
 		Primary Max partition 4. 
 		Logical Partition (limited by the driver the operating system support. SCSI driver limited to 15 partitions)
 	GUID Partition Table 8ZB ->
 		Partition Max 128
+```
+
 File system on top partitions: ext2, ext3, ext4, ReiserFS, XFS, Btrfs
-* Using fdisk to create partitions
+
+## Using fdisk to create partitions
+
 To list the partitions that are in a file disk 
-# fdisk -l /dev/sdb
+
+```console
+fdisk -l /dev/sdb
+```
+
 To create a partition in interactive mode
-# fdisk /dev/sdb
+
+```console
+fdisk /dev/sdb
+```
+
 Remove the partition by overwritting the partition root
-# dd if=/dev/zero of=/dev/sdb count=1 bs=512
-* Using gdisk to create partitions
+
+```console
+dd if=/dev/zero of=/dev/sdb count=1 bs=512
+```
+
+## Using gdisk to create partitions
+
 To create partitions with gdisk
-# gdisk /dev/sdb
+
+```console
+gdisk /dev/sdb
+```
+
 There is a backup at the end of the disk (First 512 is the MBR, seconds 512 for the GPT headers, GPT partition for the 16K and the last 16K of the disk are the partition backup. 
-* Using GNU parted to create partitions
-# parted /dev/sdb printmk
+
+## Using GNU parted to create partitions
+
+```console
+parted /dev/sdb printmk
+```
+
 To create a label
+
 (parted) mklabel msdos
+
 To create a primary partition (200 MB)
+
 (parted) mkpart primary 1 200
+
 To create an extended partition to whole disk
+
 (parted) mkpart extended 201 -1
+
 To create a logical partition 
+
 (parted) mkpart logical 202 300
+
 Be aware of the numbering, as MBR only allows up to 15 partitions. 
-* Scripting partition creation
+
+## Scripting partition creation
+
 parted can script creation of partitions. parted -s is the silent mode. -- is required if we used -1m at the end. 
 Backing up the MBR (dos label disk)
+
 # dd if=/dev/sda count=1 bs=512 of=/root/sdb.mbr
-* Summary
-MSDOS Label: 83 Linux, 82 swap, 8e LV, fd RAID
-GPT 8300 Linux, 8200 swap, Copy held at the end of the disk. 
+
+## Codes for partitions
+
+MSDOS Label: 83 
+Linux, 82 
+swap, 8e LV, fd RAID
+GPT 8300 Linux, 8200 swap, 
+Copy held at the end of the disk. 
 
 03 - CREATING LINUX FILE SYSTEMS
 * General purpose file systems with ext4
@@ -256,19 +303,37 @@ We can put the backup
 # lvremove /dev/vg1/backup
 * Migrating PVs to new storage
 Create a new storage. References in fstab will remain
-# pvcreate /dev/sdc5
+
+```console
+pvcreate /dev/sdc5
+```
 Extend the original volume
+
+```console
 # vgextend vg1 /dev/sdc5
 # pvmove /dev/sdb10 /dev/sdc5
-Reduce and wipe the volumes
-# vgreduce vg1 /dev/sdb10
-# pvremove /dev/sdb10
-Resize the logical volume
-# vgs
+```
 
-07 - CONFIGURING AN ISCSI BLOCK STORAGE SERVER
-08 - IMPLEMENTING HA CLUSTERS
-09 - IMPLEMENTING AGGREGATED STORAGE WITH GlusterFS
-10 - ENCRYPTED VOLUMES
-11 - USING THE AUTO/MOUNTER
-12 - IMPLEMENTING USER AND GROUP QUOTAS
+Reduce and wipe the volumes
+
+```console
+vgreduce vg1 /dev/sdb10
+pvremove /dev/sdb10
+```
+Resize the logical volume
+
+```console
+vgs
+```
+
+# 07 - CONFIGURING AN ISCSI BLOCK STORAGE SERVER
+
+# 08 - IMPLEMENTING HA CLUSTERS
+
+# 09 - IMPLEMENTING AGGREGATED STORAGE WITH GlusterFS
+
+# 10 - ENCRYPTED VOLUMES
+
+# 11 - USING THE AUTO/MOUNTER
+
+# 12 - IMPLEMENTING USER AND GROUP QUOTAS
