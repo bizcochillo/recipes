@@ -60,19 +60,27 @@ parted /dev/sdb printmk
 
 To create a label
 
+```console
 (parted) mklabel msdos
+```
 
 To create a primary partition (200 MB)
 
+```console
 (parted) mkpart primary 1 200
+```
 
 To create an extended partition to whole disk
 
+```console
 (parted) mkpart extended 201 -1
+```
 
 To create a logical partition 
 
+```console
 (parted) mkpart logical 202 300
+```
 
 Be aware of the numbering, as MBR only allows up to 15 partitions. 
 
@@ -81,7 +89,9 @@ Be aware of the numbering, as MBR only allows up to 15 partitions.
 parted can script creation of partitions. parted -s is the silent mode. -- is required if we used -1m at the end. 
 Backing up the MBR (dos label disk)
 
-# dd if=/dev/sda count=1 bs=512 of=/root/sdb.mbr
+```console
+dd if=/dev/sda count=1 bs=512 of=/root/sdb.mbr
+```
 
 ## Codes for partitions
 
@@ -91,94 +101,223 @@ swap, 8e LV, fd RAID
 GPT 8300 Linux, 8200 swap, 
 Copy held at the end of the disk. 
 
-03 - CREATING LINUX FILE SYSTEMS
-* General purpose file systems with ext4
-mkfs.<tab> show the options
+# 03 - CREATING LINUX FILE SYSTEMS
+
+## General purpose file systems with ext4
+
+`mkfs.<tab>` show the options
+
 To create a file system and add a label DATA
-# mkfs.ext4 -L DATA /dev/sdb6
+
+```console
+mkfs.ext4 -L DATA /dev/sdb6
+```
+
 To modify file system settings
-# tune2fs -L MYDATA -c 0 -i 0 /dev/sdb6
+
+```console
+tune2fs -L MYDATA -c 0 -i 0 /dev/sdb6
+```
+
 To show metadata of a volume
-# dumpe2fs /dev/sdb6
-* Enterprise class file systems with xfs
+
+```console
+dumpe2fs /dev/sdb6
+```
+
+## Enterprise class file systems with xfs
+
 To create (originally developed by Silicon Graphics)
-# mkfs.xfs -b size=1k -l size=10m /dev/sdb7
+
+```console
+mkfs.xfs -b size=1k -l size=10m /dev/sdb7
+```
+
 To go into expert mode into xfs
-# xfs_db -x /dev/sdb7
+
+```console
+xfs_db -x /dev/sdb7
+```
+
 To get help
+
+```console
 xfs_db> help
+```
+
 To get UUID
+```console
 xfs_db> uuid
+```
+
 Get label
+
+```console
 xfs_db> label
+```
+
 Set label to DATA2
+
+```console
 xfs_db> label DATA2
-* Using the mount command and ext4 file systems
+```
+
+## Using the mount command and ext4 file systems
+
 Mount ext4 to directory
-# mount /dev/sdb6 /mnt
+
+```console
+mount /dev/sdb6 /mnt
+```
+
 Unmount the fs
-# umount /mnt
+```console
+umount /mnt
+```
+
 Create directories and mount file systems
-# mkdir -p /data/{mydata,data2}
-# mount /dev/sdb6 /data/mydata
-# mount | grep mydata
+
+```console
+mkdir -p /data/{mydata,data2}
+mount /dev/sdb6 /data/mydata
+mount | grep mydata
+```console
+
 We can add options to the mount command 
-# mount -o remount,noexec /dev/sdb6 /data/mydata
-mount shows the content of the process mount 
-# cat /proc/mounts
+
+```console
+mount -o remount,noexec /dev/sdb6 /data/mydata
+```
+
+mount shows the content of the process mount
+
+```console
+cat /proc/mounts
+```
+
 To get the label/id of a volume
-# blkid /dev/sdb6
+
+```console
+blkid /dev/sdb6
+```
+
 To go to the /etc/fstab file to mount (to persists the mounts) 
-# vi /etc/fstab
+
+```console
+vi /etc/fstab
+
 (in the /etc/fstab) 
 UUID="8d82e24b-0799-4421-8e46-1c0e6adda87c" /data/mydata ext4 noexec 0 2
 <CTRL>+U to delete the line
+```
+
 Afterwards we can mount all
-# mount -a 
-* Using the mount command and xfs file systems
+```console
+mount -a 
+```
+
+## Using the mount command and xfs file systems
+
 The same for xfs system
+
+```console
 UUID="0d6cf89b-2acf-41bd-8979-1a2ac2b068c0" /data/data2 xfs defaults 0 0
 # mount -a
+```
+
 Everything should be fine
-# mount | grep data2
+
+```console
+mount | grep data2
+```
+
 Once mounted, we can see metadata
-# xfs_info /dev/sdb7
-* Mount options
-Look at man pages and go for /INDEPENDENT
-Independent features, no access time, enabling user quota and group quota only for informative purposes. 
+
+```console
+xfs_info /dev/sdb7
+```
+
+## Mount options
+
+Look at man pages and go for `/INDEPENDENT`. Independent features, no access time, enabling user quota and group quota only for informative purposes. 
+```console
 In /etc/fstab:
   UUID="8d82e24b-0799-4421-8e46-1c0e6adda87c" /data/mydata ext4 noatime,noexec 0 2
   UUID="0d6cf89b-2acf-41bd-8979-1a2ac2b068c0" /data/data2 xfs noexec,noatime,uquota,gqnoenforce 0 0
+```console
 
-04 - MANAGING SWAP AND RAID SERVICES
-* Creating swap space
+# 04 - MANAGING SWAP AND RAID SERVICES
+# Creating swap space
+
 Create a swap partition
-# mkswap /dev/sdb5
+
+```console
+mkswap /dev/sdb5
+```
+
 We can see the swap Summary
-# swapon -s
+
+```console
+swapon -s
+```
+
 The priority can control how the swap space is used. To set the partition to be used as swap
-# swapon /dev/sdb5
+
+```console
+swapon /dev/sdb5
+```
+
 To disable swap on a swap partition
-# swapoff /dev/sdb5
+
+```console
+swapoff /dev/sdb5
+```
+
 To see how many free memory swap has
-# free -m
+
+```console
+free -m
+```
+
 We also can use swap files. Here we have been using swap partitions.
-* Setting the swap priority and mounting at boot
+
+## Setting the swap priority and mounting at boot
+
 To disable swap at all
-# swapoff -a
-To configure swap look at the /etc/fstab file. Two example lines:
+
+```console
+swapoff -a
+```
+
+To configure swap look at the `/etc/fstab` file. Two example lines:
+```console
 >> /dev/mapper/centos-swap swap                    swap    sw,pri=1 0 0
 >> UUID="69d16c94-5bb9-4918-9347-4afaa4f6f3c1" swap swap sw,pri=5 0 0
-* Configuring software RAID
+```
+
+## Configuring software RAID
+
 RAID: Redundant Array of Inexpensive Disks. Usually used to create fault tolerant disk arrays. Traditional Linux Software RAID creates dev mapper virtual device file. RAID is integrated into Btrfs
+
 Linear: Partitions/disk not the same size, volume is expanded across all disk in array. Spare disk is not supported
+
 RAID0: Similar to above but the disk or partitions are similar size. 
+
 RAID1: Mirror data between devices of similar size
+
 RAID4/5/6: Three or more devices (4 with RAID6), data is striped with parity
+
 To check if we support RAID
-# cat /proc/mdstat
+
+```console
+cat /proc/mdstat
+```
+
 Create a raid based on the raid enabled partitions with the multi disk administrator tool (level mirror)
-# mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sdb13 /dev/sdb14
+
+```console
+mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sdb13 /dev/sdb14
+
 To see if the Linux Kernel modules have been Loaded
 # lsmod | grep raid
 Create file system on the new created partition
