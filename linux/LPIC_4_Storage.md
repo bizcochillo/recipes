@@ -317,84 +317,174 @@ Create a raid based on the raid enabled partitions with the multi disk administr
 
 ```console
 mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sdb13 /dev/sdb14
+```
 
 To see if the Linux Kernel modules have been Loaded
-# lsmod | grep raid
-Create file system on the new created partition
-# mkfs.xfs /dev/md0
-Check the status of the RAID 
-# mdadm --detail --scan
-# mdadm --detail --scan >> /etc/mdadm.conf
-# mdadm --stop /dev/md0
-# mdadm --assemble --scan 
 
-05 - EXTENDING PERMISSIONS WITH ACLS
-* ACL support within the Kernel and file systems
+```console
+lsmod | grep raid
+```
+
+Create file system on the new created partition
+
+```console
+mkfs.xfs /dev/md0
+```
+
+Check the status of the RAID 
+
+```console
+mdadm --detail --scan
+mdadm --detail --scan >> /etc/mdadm.conf
+mdadm --stop /dev/md0
+mdadm --assemble --scan 
+```
+
+# 05 - EXTENDING PERMISSIONS WITH ACLS
+
+## ACL support within the Kernel and file systems
+
 To see levels of ACLs support
-$ grep ACL /boot/config-$(uname -r)
+
+```console
+grep ACL /boot/config-$(uname -r)
+```
+
 Option y indicates that it's compiled into the kernel and m it's loaded in a module by the kernel. 
 To show the file system characteristics and acl is supported
-$ sudo tune2fs -l /dev/sdb6 | grep -i default
+
+```console
+sudo tune2fs -l /dev/sdb6 | grep -i default
+```
+
 Depending the file system it may be necessary to load the kernel module
+```console
 drwxrwxr-x.  3 tux  tux         18 Nov 16 13:17 usr
-* Listing file system ACLs
+```
+
+## Listing file system ACLs
 The . (dot) after the list indicates support for the ACLs but it's currently not set
 To see the acls of a file
-$ getfacl df.sh
-Others does not have access to the directory test-acl
-* Setting default ACLs
-$ setfacl -m d:o:--- test-acl/
-To add ACLs for other user
-$ setfacl -dm u:bob:rw test-acl/
-* Adding ACL entries
-# mkdir /work
-# chmod o= /work/
-To add ACLs for individual files, for instance
-# setfacl -m d:o:--- /work
-# echo file1 > /work/file1
-# echo file2 > /work/file2
-# setfacl -m u:tux:rw /work/file1
-# su - tux
-$ cd /work/
-It's ok
-$ echo hello >> file1
-$ cat file1
-Does not work (permission denied)
-$ cat file2
-* Removing ACLs
-To remove individual entries
-# setfacl -x u:tux file1
-To remove all entries
-# setfacl -b file1
-* Diagnosing and resolving security issues
-See password aging attributes for the user
-# chage -l tux
-To change the context in SELinux we cannot see the file
-ls -Z /etc/shadow
-Install web server httpd
-yum install httpd
-# mkdir /web
-# chgrp apache /web
-# chmod 2750 /web/
-# setfacl -m d:o:--- /web
-# echo "My Web" > /web/index.html
-# ls -l /web/index.html
-# vim /etc/httpd/conf/
-# apachectl configtest
-# systemctl restart httpd
-To look for events
-# ausearch -m AVC -ts recent
-We get the right web page but the wrong context
-# semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
-Restore content in directory and files within
-# restorecon /web
-# restorecon /web/*
-Check context is correct
-# ls -Zd /web/
-# ls -Z /web/
 
-06 - MANAGING LOGICAL VOLUMES
-* Creating LVM in CentOS
+```console
+getfacl df.sh
+```
+
+Others does not have access to the directory test-acl
+
+## Setting default ACLs
+
+```console
+setfacl -m d:o:--- test-acl/
+```
+
+To add ACLs for other user
+
+```console
+setfacl -dm u:bob:rw test-acl/
+```
+
+## Adding ACL entries
+
+```console 
+mkdir /work
+```
+
+```console
+chmod o= /work/
+```
+
+To add ACLs for individual files, for instance
+
+```console
+setfacl -m d:o:--- /work
+echo file1 > /work/file1
+echo file2 > /work/file2
+setfacl -m u:tux:rw /work/file1
+su - tux
+cd /work/
+
+==> It's ok
+
+echo hello >> file1
+cat file1
+
+==> Does not work (permission denied)
+cat file2
+```
+
+
+## Removing ACLs
+
+To remove individual entries
+
+```console
+setfacl -x u:tux file1
+```
+
+To remove all entries
+
+```console
+setfacl -b file1
+```
+
+## Diagnosing and resolving security issues
+
+See password aging attributes for the user
+
+```console
+chage -l tux
+```
+To change the context in SELinux we cannot see the file
+
+```console
+ls -Z /etc/shadow
+```
+
+Install web server httpd
+
+```console
+yum install httpd
+mkdir /web
+chgrp apache /web
+chmod 2750 /web/
+setfacl -m d:o:--- /web
+echo "My Web" > /web/index.html
+ls -l /web/index.html
+vim /etc/httpd/conf/
+apachectl configtest
+systemctl restart httpd
+```
+
+To look for events
+
+```console
+ausearch -m AVC -ts recent
+```
+
+We get the right web page but the wrong context
+
+```console
+semanage fcontext -a -t httpd_sys_content_t "/web(/.*)?"
+```
+
+Restore content in directory and files within
+
+```console
+restorecon /web
+restorecon /web/*
+```
+
+Check context is correct
+
+```console
+ls -Zd /web/
+ls -Z /web/
+```
+
+# 06 - MANAGING LOGICAL VOLUMES
+
+## Creating LVM in CentOS
 LVM. (PV, VG and LV). We can create a lot of necessary Logical Volumes
 To see the physical volumes
 # pvscan
