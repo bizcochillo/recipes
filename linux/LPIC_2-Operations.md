@@ -175,94 +175,233 @@ restorecon /etc/shadow
 System continues to boot
 
 # 04 - MANAGING GRUB2
-* Introduction and re-installing GRUB
-# grub2-install /dev/sda/
+
+## Introduction and re-installing GRUB
+
+```console
+grub2-install /dev/sda/
+```
+
 To install grub for a EFI based machine
-# yum reinstall grub2-efi shim 
-* Manage GRUB2 Defaults
-# vi /etc/default/grub
-# grub2-mkconfig -o /boot/grub2/grub.cfg
-* Manage Persistent Settings with grubby
+
+```console
+yum reinstall grub2-efi shim 
+```
+
+## Manage GRUB2 Defaults
+
+```console
+vi /etc/default/grub
+grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+## Manage Persistent Settings with grubby
+
 To see the default kernel
-# grubby --default-kernel
+
+```console
+grubby --default-kernel
+```
+
 To change to default kernel
-# grubby --set-default /boot/vmlinuz-3.10.0-327.el7.x86_64
+
+```console
+grubby --set-default /boot/vmlinuz-3.10.0-327.el7.x86_64
+```
+
 To see all GRUB info 
-# grubby --info=ALL
+
+```console
+grubby --info=ALL
+```
+
 To see only one kernel
-# grubby --info= /boot/vmlinuz-3.10.0-327.el7.x86_64
+
+```console
+grubby --info= /boot/vmlinuz-3.10.0-327.el7.x86_64
+```
+
 To remove arguments from kernel initialization (!$ for last argument)
-# grubby --remove-args="rhgb quiet" --update-kernel !$
-* Password protect GRUB2
+
+```console
+grubby --remove-args="rhgb quiet" --update-kernel !$
+```
+
+## Password protect GRUB2
+
 To create password protected grub entry go to edit /etc/grub.d/01_users
+
+```console
 grub2-install /dev/sda
 vi /etc/grub.d/01_users
+```
+
 To create password protected passwords
-# grub2-mkpasswd-pbkdf2
-* Custom GRUB2 entries
-edit the 40_custom file at /etc/grub.d
+
+```console
+grub2-mkpasswd-pbkdf2
+```
+
+## Custom GRUB2 entries
+edit the `40_custom` file at `/etc/grub.d`
 
 # 05 - MANAGING LINUX PROCESSES
-* Listing processes with ps
+
+## Listing processes with ps
+
 Show processes
-# ps
+
+```console
+ps
+```
+
 Show all processes
-# ps -e
+
+```console
+ps -e
+```
+
 Show all process and not associated with terminal
-# ps aux
+
+```console
+ps aux
+```
+
 Show tree form
-# ps -e --forest
+
+```console
+ps -e --forest
+```
+
 To show better process tree
-# pstree
+
+```console
+pstree
+```
+
 To show all information
-# ps -f
+
+```console
+ps -f
+```
+
 And even more information
-# ps -F
+
+```console
+ps -F
+```
+
 Long listing for processes
-# ps -l
+
+```console
+ps -l
+```
+
 Replace RSS for memory used
-# ps -ly
+
+```console
+ps -ly
+```
+
 To show everything again
-# ps -elf
+
+```console
+ps -elf
+```
+
 and filtering
-# ps -elf | grep sshd
-* Using the /proc directory and the $$ variable
-# cd /proc
+
+```console
+ps -elf | grep sshd
+```
+
+## Using the /proc directory and the $$ variable
+
+```console
+cd /proc
+```
+
 To see process one
+
+```console
 # ps -p1 -f
 UID        PID  PPID  C STIME TTY          TIME CMD
 root         1     0  0 08:18 ?        00:00:01 /usr/lib/systemd/systemd --switc
 echo $$ gets the current PID of the current process
 # ps -p $$ -F
+```
+
 Current working directory 
-# ls -l cwd
+
+```console
+ls -l cwd
+```
+
 Get the executable
-# ls -l exe
+
+```console
+ls -l exe
+```
+
 The last process id run
-# cat loadavg
-* Manage processes with kill
+
+```console
+cat loadavg
+```
+
+## Manage processes with kill
+
 To list all signals
-# kill -l
+
+```console
+kill -l
+```
+
 For termination signal
-# kill <pid>
-# kill -15 <pid>
-# kill -term <pid>
-# kill -sigterm <pid>
-# kill -sigkill <pid>
+
+```console
+kill <pid>
+kill -15 <pid>
+kill -term <pid>
+kill -sigterm <pid>
+kill -sigkill <pid>
+```
+
 To list all keyboard shortcuts
-# stty -a 
-* Shortcuts with pgrep and pkill
+
+```console
+stty -a 
+```
+
+## Shortcuts with pgrep and pkill
+
 For instance to filter the processes
-# pgrep sshd
+
+```console
+pgrep sshd
+```
+
 To use pgrep output
-# ps -F -p $(pgrep sshd)
+
+```console
+ps -F -p $(pgrep sshd)
+```
+
 To start processes in the background, add & to the end
-# sleep 100&
+
+```console
+sleep 100&
+```
+
 To kill all pids with process name sleep
-$ pkill sleep
-Command top for listing processes
-press e for showing size in different units. f for fields and orderingq
-* Monitor resource usage with top
+
+```console
+pkill sleep
+```
+
+The command top is used for listing processes. Press e for showing size in different units. f for fields and ordering
+
+## Monitor resource usage with top
 
 # 06 - PROCESS PRIORITY
 * Background tasks
