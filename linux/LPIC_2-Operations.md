@@ -450,50 +450,128 @@ vi /etc/security/limits.conf
 ```
 
 # 07 - MONITOR LINUX PERFORMANCE
-* Listing standard tools in the proc tools next generation
-$ rpm -ql procps-ng
+
+## Listing standard tools in the proc tools next generation
+
+```console
+rpm -ql procps-ng
+```
+
 To see to which package a tool belongs to
-$ rpm -qf /usr/bin/top
+
+```console
+rpm -qf /usr/bin/top
+```
+
 Package -ql procps-ng
 List documentation
-$ rpm -qd procps-ng
+
+```console
+rpm -qd procps-ng
+```
+
 List configuration
-$ rpm -qc procps-ng
+
+```console
+rpm -qc procps-ng
+```
+
 List only programs
-$ rpm -ql procps-ng | grep '^/usr/bin/'
+
+```console
+rpm -ql procps-ng | grep '^/usr/bin/'
+```
+
 Number of programs
-$ rpm -ql procps-ng | grep '^/usr/bin/' | wc -l
-* Using pwdx and pmap
+
+```console
+rpm -ql procps-ng | grep '^/usr/bin/' | wc -l
+```
+
+## Using pwdx and pmap
+
 Free in megabytes
-$ free -m
+
+```console
+free -m
+```
+
 In gb
-$ free -g
+
+```console
+free -g
+```
+
 To see how memory maps to a running proccess (current) 
-$ pmap $$
+
+```console
+pmap $$
+```
+
 pwdx to see process working directory
-$ pwdx $$
-$ pwdx $(pgrep sshd)
-* Working with uptime and tload
+
+```console
+pwdx $$
+pwdx $(pgrep sshd)
+```
+
+## Working with uptime and tload
+
 the uptime of the system. load average 1-5-15 mins
-$ uptime
+
+```console
+uptime
+```
+
 who is  logged 
-$ who
+
+```console
+who
+```
+
 who + uptime
-$ w
+
+```console
+w
+```
+
 List CPU information
-$ lscpu 
-cat /proc/uptime shows total uptime in seconds and idle time 
-cat /proc/loadavg shows average usage
-To every four seconds issue an uptime command
-$ watch -n 4 uptime
-tload is intended by design to show the average load
-* recording performance with top and vmstat
+
+```console
+lscpu 
+```
+
+`cat /proc/uptime` shows total uptime in seconds and idle time 
+
+`cat /proc/loadavg` shows average usage
+
+To every four seconds issue an `uptime` command
+
+```console
+watch -n 4 uptime
+```
+
+`tload` is intended by design to show the average load
+
+## recording performance with top and vmstat
+
 To see one interation (batch mode)
-$ top -b -n1
+
+```console
+top -b -n1
+```
+
 To see the size in k (display unit - kilobytes)
-$ vmstat -S k
+
+```console
+vmstat -S k
+```
+
 To collect iteration every five minutes three times (in megabytes)
-$ vmstat -S m 5 3
+
+```console
+vmstat -S m 5 3
+```
 
 # 08 - USING SYSSTAT TO MONITOR PERFORMANCE
 To produce and deliver reports on system use 
