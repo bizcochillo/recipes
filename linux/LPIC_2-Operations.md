@@ -1,7 +1,15 @@
-01 - INTRODUCTION
-* Reading operating system data
-$ cat /etc/system-release
-$ lsb_release -d
+# 01 - INTRODUCTION
+
+## Reading operating system data
+
+```console
+cat /etc/system-release
+```
+
+```console
+lsb_release -d
+```
+
 To query the installation database
 $ rpm -qf $(which lsb_release)
 To see the kernel version
@@ -13,7 +21,7 @@ $ cat /proc/cmdline
 Partition are separated 
 $ lsblk
 
-02 - STARTING AND STOPING CENTOS 7
+# 02 - STARTING AND STOPING CENTOS 7
 
 * Introduction and using wall
 $ write user
@@ -54,7 +62,7 @@ $ systemctl set-default multi-user.target
 systemctl isolate
 * Selecting runlevels
 
-03 - THE BOOT PROCESS
+# 03 - THE BOOT PROCESS
 * Managing GRU Recovery
 To edit grub file
 # vi /etc/default/grub
@@ -69,7 +77,7 @@ sh-4.3$ mount -o remount,ro /sysroot; exit
 # restorecon /etc/shadow
 System continues to boot
 
-04 - MANAGING GRUB2
+# 04 - MANAGING GRUB2
 * Introduction and re-installing GRUB
 # grub2-install /dev/sda/
 To install grub for a EFI based machine
@@ -97,7 +105,7 @@ To create password protected passwords
 * Custom GRUB2 entries
 edit the 40_custom file at /etc/grub.d
 
-05 - MANAGING LINUX PROCESSES
+# 05 - MANAGING LINUX PROCESSES
 * Listing processes with ps
 Show processes
 # ps
@@ -159,7 +167,7 @@ Command top for listing processes
 press e for showing size in different units. f for fields and orderingq
 * Monitor resource usage with top
 
-06 - PROCESS PRIORITY
+# 06 - PROCESS PRIORITY
 * Background tasks
 $ sleep 1000&
 To see jobs
@@ -179,7 +187,7 @@ $ renice -n 10 -p 3403
 To set limits
 $ vi /etc/security/limits.conf
 
-07 - MONITOR LINUX PERFORMANCE
+# 07 - MONITOR LINUX PERFORMANCE
 * Listing standard tools in the proc tools next generation
 $ rpm -ql procps-ng
 To see to which package a tool belongs to
@@ -225,7 +233,7 @@ $ vmstat -S k
 To collect iteration every five minutes three times (in megabytes)
 $ vmstat -S m 5 3
 
-08 - USING SYSSTAT TO MONITOR PERFORMANCE
+# 08 - USING SYSSTAT TO MONITOR PERFORMANCE
 To produce and deliver reports on system use 
 * Installing sysstat
 # yum install -y sysstat
@@ -257,7 +265,7 @@ Start and end period
 sar files
 # sar -f /var/log/sa/sa15
 
-09 - MANAGING SHARED LIBRARIES
+# 09 - MANAGING SHARED LIBRARIES
 * Viewing shared library modules
 $ ldd /usr/bin/ls
 /lib64/libpcre.so.1 is the posix common regular expressions
@@ -281,7 +289,7 @@ To be able to write the cache file
 $ ldconfig -p
 # ldconfig
 
-10 - SCHEDULING TASKS IN LINUX
+# 10 - SCHEDULING TASKS IN LINUX
 * Simple shell scripts
 mail script
 #!/usr/bin/bash - shebang (for starting the file)
@@ -321,7 +329,7 @@ $ atd
 Remove jobs
 $ atrm
 
-11 - LOG FILES AND LOGROTATE
+# 11 - LOG FILES AND LOGROTATE
 * Auditing user logins
 Last login of every users
 # lastlog
@@ -375,7 +383,7 @@ For daemon logs
 List boots
 # journalctl --list-boots
 
-12 - INTRODUCING SELINUX
+# 12 - INTRODUCING SELINUX
 * List and identify SELinux files and processes
 Mandatory access control system. 
 * SELinux status and contexts
@@ -433,74 +441,162 @@ See port policies
 To add a new port
 # semanage port -a -t ssh_port_t -p tcp 2222
 
-13 - MANAGING SOFTWARE ON CentOS7
-* Use the rpm command
-# yum install httpd
-Into the yum cache /var/cache/yum/x86_64/7/base/packages/
-Native RPM package. List all software
-# rpm -qa 
-To install a package
-# rpm -i <name.rpm>
-Remove the package
-# rpm -e nmap
-List content of an installed package
-# rpm -ql nmap
-The package wasn't installed
-# rpm -qpl <name.rpm>
-Verify the installed package
-# rpm -V nmap
-* Working with yum
-Install bash completion with yum
-# yum install bash-completion
-To auto accept 
-# yum install -y bash-completion
-Get info about a package
-# yum info bash-completion
-Installed packages
-# yum list installed
-Remove software
-# yum remove bash-completion
-* Configuring software repositories
-Repo files at /etc/yum.repos.d/
-List repositories
-# yum repolist
-List all repositories (even the disabled ones)
-# yum repolist all
-* Working with the yum cache
-Cache at /var/cache/yum
-To clean the cache
-# yum clean all
-# yum makecache
-* Updating the kernel
-When updating the kernel yum will install new kernel and does not update the original. It updates grub to make the new one the default pick. This make it safe s we can always choose to boot to the original kernel. If we do not want to install new kernels or upgrae the existing we can add exclude=kernel* to /etc/yum.conf
-* Using RPMS
-Enable repos in CentOS-Source.repo
-# yum install -y yum-utils ncurses-devel
-# yum groupinstall "Development Tools"
-# yumdownloader --source zsh
-# rpm -i zsh..src.rpm 
-# cd ~/rmpbuild/SOURCES
-# tar -xjf zsh..tar.bz2
-# cd zsh...; ./configure
-# make; make install
-* Managing Services
-Install, enable and start services
-# systemctl enable httpd.service
-# systemctl start httpd.service
---> for both enable and start
-# systemctl enable http.service --now
-# systemctl status httpd.service
-Remove services
-# systemctl remove httpd.service
+# 13 - MANAGING SOFTWARE ON CentOS7
 
-14 - CONFIGURATION MANAGEMENT TOOLS
-* Install puppet (ruby based product)
-# yum -install -y puppet
-# puppet --version
-* Extracting Data with facter
+## Use the rpm command
+```console
+yum install httpd
+```
+
+Into the yum cache `/var/cache/yum/x86_64/7/base/packages/`. Native RPM package. List all software
+
+```console
+rpm -qa
+```
+ 
+To install a package
+
+```console
+rpm -i <name.rpm>
+```
+
+Remove the package
+
+```console
+rpm -e nmap
+```
+
+List content of an installed package
+
+```console
+rpm -ql nmap
+```
+
+The package wasn't installed
+
+```console
+rpm -qpl <name.rpm>
+```
+
+Verify the installed package
+
+```console
+rpm -V nmap
+```
+
+## Working with yum
+
+Install bash completion with yum
+
+```console
+yum install bash-completion
+```
+
+To auto accept 
+
+```console
+yum install -y bash-completion
+```
+
+Get info about a package
+
+```console
+yum info bash-completion
+```
+
+Installed packages
+
+```console
+yum list installed
+```
+
+Remove software
+
+```console
+yum remove bash-completion
+```
+
+## Configuring software repositories
+
+Repo files at `/etc/yum.repos.d/`. List repositories
+
+```console
+yum repolist
+```
+
+List all repositories (even the disabled ones)
+
+```console
+yum repolist all
+```
+
+## Working with the yum cache
+
+Cache at `/var/cache/yum`. To clean the cache
+
+```console
+yum clean all
+yum makecache
+```
+
+## Updating the kernel
+
+When updating the kernel yum will install new kernel and does not update the original. It updates grub to make the new one the default pick. This make it safe s we can always choose to boot to the original kernel. If we do not want to install new kernels or upgrae the existing we can add `exclude=kernel*` to `/etc/yum.conf`
+
+## Using RPMS
+
+Enable repos in CentOS-Source.repo
+
+```console
+yum install -y yum-utils ncurses-devel
+yum groupinstall "Development Tools"
+yumdownloader --source zsh
+rpm -i zsh..src.rpm 
+cd ~/rmpbuild/SOURCES
+tar -xjf zsh..tar.bz2
+cd zsh...; ./configure
+make; make install
+```
+
+## Managing Services
+
+Install, enable and start services
+
+```console
+systemctl enable httpd.service
+systemctl start httpd.service
+--> for both enable and start
+systemctl enable http.service --now
+systemctl status httpd.service
+```
+
+Remove services
+```console
+systemctl remove httpd.service
+```
+
+# 14 - CONFIGURATION MANAGEMENT TOOLS
+
+## Install puppet (ruby based product)
+
+```console
+yum -install -y puppet
+puppet --version
+```
+
+## Extracting Data with facter
+
 We can use facter to pass configuration detail to puppet
-# facter | grep hostname
-# facter | grep domain
-* Using and applying manifests
-Created at /etc/puppet/manifests/site.pp. Apply rules for files, packages, services and users. 
-# puppet apply site.pp
+
+```console
+facter | grep hostname
+facter | grep domain
+```
+
+## Using and applying manifests
+
+Created at `/etc/puppet/manifests/site.pp`. Apply rules for files, packages, services and users. 
+
+```console
+puppet apply site.pp
+```
