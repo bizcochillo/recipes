@@ -404,24 +404,50 @@ The command top is used for listing processes. Press e for showing size in diffe
 ## Monitor resource usage with top
 
 # 06 - PROCESS PRIORITY
-* Background tasks
-$ sleep 1000&
+
+## Background tasks
+
+```console
+sleep 1000&
+```
+
 To see jobs
-$ jobs
-Ctrl+Z stop the process
-$ bg start the stopped job in the background
-To bring to the foreground
-$ fg 1 
+
+```console
+jobs
+```
+
+`Ctrl+Z` stop the process. `bg` start the stopped job in the background. To bring to the foreground
+
+```console
+fg 1 
+```
+
 When we kill the parent, the first process (pid 1) becomes the direct antecessor. 
-$ ps -F -p $(pgrep sleep)
-* Using nice to control process priority
-Priority column CPU priority. It's controlled by the nice value. (nice from -20 to 19. The higher the number, the less CPU an app gets)
-To set priority
-$ nice -n 1 sleep 1000&
+
+```console
+ps -F -p $(pgrep sleep)
+```
+
+## Using nice to control process priority
+
+Priority column CPU priority. It's controlled by the nice value. (nice from -20 to 19. The higher the number, the less CPU an app gets). To set priority
+
+```console
+nice -n 1 sleep 1000&
+```
+
 To put new priority
-$ renice -n 10 -p 3403
+
+```console
+renice -n 10 -p 3403
+```
+
 To set limits
-$ vi /etc/security/limits.conf
+
+```console
+vi /etc/security/limits.conf
+```
 
 # 07 - MONITOR LINUX PERFORMANCE
 * Listing standard tools in the proc tools next generation
