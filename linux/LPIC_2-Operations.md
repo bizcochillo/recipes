@@ -427,58 +427,129 @@ Remove jobs
 $ atrm
 
 # 11 - LOG FILES AND LOGROTATE
-* Auditing user logins
+
+## Auditing user logins
+
 Last login of every users
-# lastlog
+
+```console
+lastlog
+```
+
 Reverse filter 
-# lastlog | grep -v "Never"
+
+```console
+lastlog | grep -v "Never"
+```
+
 Extra information
-# last -n 10
+
+```console
+last -n 10
+```
+
 Users still logged
-# last | grep "still"
+
+```console
+last | grep "still"
+```
+
 Reboots
-# last reboot
+
+```console
+last reboot
+```
+
 We can look for a particular user
-# last tux 
-# last -n 10 tux
+
+```console
+last tux 
+last -n 10 tux
+```
+
 To execute last bad login
-# lastb
-* Auditing root access
-We can find logs at /var/log (/var/log/secure)
+
+```console
+lastb
+```
+
+## Auditing root access
+
+We can find logs at `/var/log` (`/var/log/secure`)
+
+```console
 ls secure*
+```
+
 When we look at secure files we cannot audit su context. (sudo: su:)
 When the file rotates, it does it with the date extension
-* Scripting with AWK
-$0 is the whole match
-# awk '/sudo:/ { print $0 }' /var/log/secure
-# awk '/sudo:/ { print $5, $6, $14}' /var/log/secure
+
+## Scripting with AWK
+
+`$0` is the whole match
+
+```console
+awk '/sudo:/ { print $0 }' /var/log/secure
+awk '/sudo:/ { print $5, $6, $14}' /var/log/secure
+```
+
 Let's put into a script
-* Configuring rsyslogd
-Main configuration is at /etc/rsyslog.conf but can be extended with .conf files at rsyslog.d folder
-/var/log/messages is definetly a place to look at when things go wrong. 
-Facility local1.info /var/log/service_log at /etc/rsyslog.conf
+
+## Configuring rsyslogd
+
+Main configuration is at `/etc/rsyslog.conf` but can be extended with .conf files at rsyslog.d folder `/var/log/messages` is definetly a place to look at when things go wrong. Facility `local1.info /var/log/service_log` at `/etc/rsyslog.conf`
+
+```console
 logger -p local1.warn "Script ended"
-* Using logrotate
-Configuration at /etc/logrotate.conf
-Command executed once a day /etc/cron.daily.
+```
+
+## Using logrotate
+
+Configuration at `/etc/logrotate.conf` Command executed once a day `/etc/cron.daily`.
 Manually rotate logs 
-# logrotate /etc/logrotate.conf
-* Managing logs with journalctl
-CentOS is system D based. We can access all logs as
-# journalctl 
+
+```console
+logrotate /etc/logrotate.conf
+```
+
+## Managing logs with journalctl
+
+CentOS is systemD based. We can access all logs as
+
+```console
+journalctl 
+```
+
 Last 10/15 entries
-# journalctl -n
-# journalctl -n 15
+
+```console
+journalctl -n
+journalctl -n 15
+```
+
 From real  time
-# journalctl -f
+```console
+journalctl -f
+```
+
 From the boot
-# journalctl -b
+
+```console
+journalctl -b
+```
+
 For daemon logs
-# journalctl -u sshd.service
-# journalctl --since "2021-12-13 12:00:00"
-# journalctl --since "10 minutes ago"
+
+```console
+journalctl -u sshd.service
+journalctl --since "2021-12-13 12:00:00"
+journalctl --since "10 minutes ago"
+```
+
 List boots
-# journalctl --list-boots
+```console
+journalctl --list-boots
+```
 
 # 12 - INTRODUCING SELINUX
 
