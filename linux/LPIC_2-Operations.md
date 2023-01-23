@@ -384,62 +384,144 @@ List boots
 # journalctl --list-boots
 
 # 12 - INTRODUCING SELINUX
-* List and identify SELinux files and processes
+
+## List and identify SELinux files and processes
+
 Mandatory access control system. 
-* SELinux status and contexts
-Change the mode to permissive 
-See the shadow context
-# ls -Z /etc/shadow
+
+## SELinux status and contexts
+
+Change the mode to permissive. See the shadow context
+```console
+ls -Z /etc/shadow
 ----------. root root system_u:object_r:shadow_t:s0    /etc/shadow
+```
+
 Current mode
-# getenforce
+
+```console
+getenforce
+```
+
 Check the SE status
-# sestatus
+
+```console
+sestatus
+```
+
 Check configuration
-# cat /etc/selinux/config
-Be careful by enforcing and allowing. FS has to be changed as well. 
-To change the current mode (Permissive)
-# setenforce 0
-getenforce will be Permissive
-To enforce again
-# setenforce 1
+
+```console
+cat /etc/selinux/config
+```
+
+Be careful by enforcing and allowing. FS has to be changed as well. To change the current mode (Permissive)
+
+```console
+setenforce 0
+```
+
+getenforce will be Permissive. To enforce again
+
+```console
+setenforce 1
+```
+
 For user id 
-# id -Z
+
+```console
+id -Z
+```
+
 For processes as well
-# ps -Z
-# ps -Zp $(pgrep sshd)
-* Audit logs and SELinux commands
+
+```console
+ps -Z
+ps -Zp $(pgrep sshd)
+```
+
+## Audit logs and SELinux commands
+
 Check logs
-# tail /var/log/audit/audit.log
+
+```console
+tail /var/log/audit/audit.log
+```
+
 To inspect logs for module avc (access vector control)
-# ausearch -m avc
+
+```console
+ausearch -m avc
+```
+
 Change context for an object
-# chcon -t unlabeled_t /etc/shadow
+
+```console
+chcon -t unlabeled_t /etc/shadow
+```
+
 To restore the file
-# restorecon /etc/shadow
+
+```console
+restorecon /etc/shadow
+```
+
 To filter for recent events
-# ausearch -m avc -ts recent
+
+```console
+ausearch -m avc -ts recent
+```
+
 To see the SE context
-# semanage fcontext -l
-# semanage fcontext -l | grep /etc/shadow
-For the targeted SE policies
+```console
+semanage fcontext -l
+semanage fcontext -l | grep /etc/shadow
+```
+
+For the targeted SE policies. 
+
+```console
 cd /etc/selinux/targeted/contexts/files/
-* Boolean and ports
-For modifying policies by using booleans
-Get installed policies
-# getsebool -a | wc -l
+```
+
+## Boolean and ports
+
+For modifying policies by using booleans. Get installed policies
+
+```console
+getsebool -a | wc -l
+```
+
 More detail on it
-# semanage boolean -l
-# getsebool httpd_read_user_content
+
+```console
+semanage boolean -l
+getsebool httpd_read_user_content
+```
+
 To change the policy 
-# setsebool httpd_read_user_content on
+
+```console
+setsebool httpd_read_user_content on
+```
+
 And to change permanent
-# setsebool -P httpd_read_user_content on
+
+```console
+setsebool -P httpd_read_user_content on
+```
+
 See port policies
-# semanage port -l
-# semanage port -l | grep ssh
+```console
+semanage port -l
+semanage port -l | grep ssh
+```
+
 To add a new port
-# semanage port -a -t ssh_port_t -p tcp 2222
+
+```console
+semanage port -a -t ssh_port_t -p tcp 2222
+```
 
 # 13 - MANAGING SOFTWARE ON CentOS7
 
