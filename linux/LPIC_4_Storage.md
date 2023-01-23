@@ -485,52 +485,121 @@ ls -Z /web/
 # 06 - MANAGING LOGICAL VOLUMES
 
 ## Creating LVM in CentOS
+
 LVM. (PV, VG and LV). We can create a lot of necessary Logical Volumes
+
 To see the physical volumes
-# pvscan
+
+```console
+pvscan
+```
+
 To se the volume groups
-# vgscan
+
+```console
+vgscan
+```
+
 To see the logical volumes on top of it
-# lvscan
+
+```console
+lvscan
+```
+
 At fdisk look at the 8e partitions Linux LVM. Create partitions
-# pvcreate /dev/sdb1[1-2-3]
+
+```console
+pvcreate /dev/sdb1[1-2-3]
+```
+
 Create a volume group
-# vgcreate vg1 /dev/sdb10 /dev/sdb11
+
+```console
+vgcreate vg1 /dev/sdb10 /dev/sdb11
+```
+
 To see info
-# vgscan 
+
+```console
+vgscan 
+```
+
 And even more information and create partition
-# vgs
-# lvcreate -n lv1 -L 184m vg1
+
+```console
+vgs
+lvcreate -n lv1 -L 184m vg1
+```
+
 And create a file system
-# mkfs.xfs /dev/vg1/lv1
+
+```console
+mkfs.xfs /dev/vg1/lv1
+```
+
 Mount the file system
-# mkdir /lvm
-# vi /etc/fstab
+
+```console
+mkdir /lvm
+vi /etc/fstab
  >> /dev/vg1/lv1 /lvm xfs defaults 0 0
-# mount -a
+mount -a
+```
 We copy some documents to the new mounted directory
-# find /usr/share/doc -name '*.pdf' -exec cp {} /lvm/ \;
+
+```console
+find /usr/share/doc -name '*.pdf' -exec cp {} /lvm/ \;
+```
+
 We see the usage
-# df -h
-* Resizing logical volumes on the fly
+
+```console
+df -h
+```
+
+## Resizing logical volumes on the fly
+
 To extend a volume group. We start seeing what is going on:
-# pvscan
-# vgextend vg1 /dev/sdb12
+
+```console
+pvscan
+vgextend vg1 /dev/sdb12
+```
+
 Extend the logical volume
-# lvextend -L +50m /dev/vg1/lv1
+```console
+lvextend -L +50m /dev/vg1/lv1
+```
+
 We have to resize the file system as well
-# xfs_growfs /lvm
-* LVM snapshots
+
+```console
+xfs_growfs /lvm
+```
+
+## LVM snapshots
+
 Create a backup volume
-# lvcreate -L 30m -s -n backup /dev/vg1/lv1
-# mount /dev/vg1/backup /mnt -o nouuid,ro
+```console
+lvcreate -L 30m -s -n backup /dev/vg1/lv1
+mount /dev/vg1/backup /mnt -o nouuid,ro
+```
+
 We can see the files in mnt
-# ls /mnt
+
+```console
+ls /mnt
+```
+
 We can put the backup 
-# tar -cf /root/backup.tar /mnt
-# umount /mnt
-# lvremove /dev/vg1/backup
-* Migrating PVs to new storage
+```console
+tar -cf /root/backup.tar /mnt
+umount /mnt
+lvremove /dev/vg1/backup
+```
+
+## Migrating PVs to new storage
+
 Create a new storage. References in fstab will remain
 
 ```console
