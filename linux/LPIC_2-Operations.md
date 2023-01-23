@@ -11,70 +11,167 @@ lsb_release -d
 ```
 
 To query the installation database
-$ rpm -qf $(which lsb_release)
+
+```console 
+rpm -qf $(which lsb_release)
+```
+
 To see the kernel version
-$ uname -r
+
+```console
+uname -r
+```
+
 Also an alternative
-$ cat /proc/version
+
+```console
+cat /proc/version
+```
+
 Information about boot
-$ cat /proc/cmdline
+
+```console
+cat /proc/cmdline
+```
+
 Partition are separated 
-$ lsblk
+
+```console
+lsblk
+```
 
 # 02 - STARTING AND STOPING CENTOS 7
 
-* Introduction and using wall
-$ write user
+## Introduction and using wall
+
+```console
+write user
+```
+
 Create a file by editing. 
-# cat > message <<END
+
+```console
+cat > message <<END
+```
+
 Send message to all terminals
-# wall < message 
+
+```console
+wall < message 
+```
+
 To see status of messaging (does not affect root)
-$ mesg
+
+```console
+mesg
+```
+
 To disable
-$ mesg n
+
+```console
+mesg n
+```
+
+
 To enable
+
+```console
 $ mesg y
+```
 
-* Shutdown commands
+## Shutdown commands
+
 Commands for going down 
-$ poweroff
-$ halt
-$ reboot
-Legacy commands
-$ init --help
-# telinit --help
-To schedule and advise a shutdown
-# shutdown -h 10 "The system goes home in 10 m"
-To cancel a shutdown
-# shutdown -c
-When it remains less than 5 minutes a message is displayed at /run/nologin
 
-* Changing runlevels
+```console
+poweroff
+halt
+reboot
+```
+
+Legacy commands
+
+```console
+init --help
+telinit --help
+```
+
+To schedule and advise a shutdown
+
+```console
+shutdown -h 10 "The system goes home in 10 m"
+```
+
+To cancel a shutdown
+```console
+shutdown -c
+```
+
+When it remains less than 5 minutes a message is displayed at `/run/nologin`
+
+## Changing runlevels
+
 We can see the runlevel. (5 graphical number)
-$ who -r 
+
+```console
+who -r 
+```
+
 With the runlevel command we get the same
-# runlevel
+
+```console
+runlevel
+```
+
 To get the graphical environment
-# systemctl get-default
+
+```console
+systemctl get-default
+```
+
 To set the multiuser target(3)
-$ systemctl set-default multi-user.target
+
+```console
+systemctl set-default multi-user.target
 systemctl isolate
-* Selecting runlevels
+```
+
+## Selecting runlevels
 
 # 03 - THE BOOT PROCESS
-* Managing GRU Recovery
+
+## Managing GRU Recovery
+
 To edit grub file
-# vi /etc/default/grub
+
+```console
+vi /etc/default/grub
+...
 GRUB_DISABLE_RECOVERY="false"
+```
+
 To generate grub configuration (add recovery mode for us)
-# grub2-mkconfig -o /boot/grub2/grub.cfg
-* Reset Lost Root Passwords (Boot to initramfs)
+
+```console
+grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+## Reset Lost Root Passwords (Boot to initramfs)
+
 Edit linux16 entry
-Remvoe rhgb and quiet add rb.break enforcing=0
-switch_root# mount -o remount, rw /sysroot ; chroot /sysroot
-sh-4.3$ mount -o remount,ro /sysroot; exit
-# restorecon /etc/shadow
+
+Remove rhgb and quiet add rb.break enforcing=0
+
+`switch_root# mount -o remount, rw /sysroot ; chroot /sysroot`
+
+```console
+mount -o remount,ro /sysroot; exit
+```
+
+```console
+restorecon /etc/shadow
+```
+
 System continues to boot
 
 # 04 - MANAGING GRUB2
