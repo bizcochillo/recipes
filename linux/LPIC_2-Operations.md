@@ -574,100 +574,226 @@ vmstat -S m 5 3
 ```
 
 # 08 - USING SYSSTAT TO MONITOR PERFORMANCE
+
 To produce and deliver reports on system use 
-* Installing sysstat
-# yum install -y sysstat
+
+## Installing sysstat
+
+```console
+yum install -y sysstat
+```
+
 Generate periodic report 
-# cat /etc/cron.d/sysstat
+
+```console
+cat /etc/cron.d/sysstat
+```
+
 Configuration of sysstat
-# cat /etc/sysconfig/sysstat
+
+```console
+cat /etc/sysconfig/sysstat
+```
+
 Start, enable and query service sysstat
-# systemctl start sysstat
-# systemctl enable sysstat
-# systemctl status sysstat
-* Additional tools
+
+```console
+systemctl start sysstat
+systemctl enable sysstat
+systemctl status sysstat
+```
+
+## Additional tools
+
 See IO stats
-$ iostat
+
+```console
+iostat
+```
+
 in mb
-$ iostat -m 5 3
+
+```console
+iostat -m 5 3
+```
+
 Collect stats for an individual process
-# pidstat -p $$ 5 3
+
+```console
+pidstat -p $$ 5 3
+```
+
 Collect memory stats
-# mpstat -P ALL 2 3
-* Creating system activity reports
+
+```console
+mpstat -P ALL 2 3
+```
+
+## Creating system activity reports
+
 Log file at /var/log/sa/
-# sar -u (CPU)
-# sar -r (Memory)
-# sar -q (Load averages)
-# sar -n DEV (network)
+
+```console
+sar -u (CPU)
+sar -r (Memory)
+sar -q (Load averages)
+sar -n DEV (network)
+```
+
 Start and end period
-# sar -s 14:00:00 -e 15:00:00
+
+```console
+sar -s 14:00:00 -e 15:00:00
+```
+
 sar files
-# sar -f /var/log/sa/sa15
+
+```console
+sar -f /var/log/sa/sa15
+```
 
 # 09 - MANAGING SHARED LIBRARIES
-* Viewing shared library modules
-$ ldd /usr/bin/ls
-/lib64/libpcre.so.1 is the posix common regular expressions
-so extension => s standard o modules
-Loaded 
-$ pmap $$
+
+## Viewing shared library modules
+
+```console
+ldd /usr/bin/ls
+```
+
+`/lib64/libpcre.so.1` is the posix common regular expressions 
+
+so extension => s standard o modules loaded 
+
+```console
+pmap $$
+```
+
 list modules for bash
-$ ldd /usr/bin/bash
-* Sharing locations
-lib directory is a link to /usr/lib and lib64 to /usr/lib64
-* Sharing library cache
+
+```console
+ldd /usr/bin/bash
+```
+
+## Sharing locations
+
+lib directory is a link to `/usr/lib` and `lib64` to `/usr/lib64`
+
+## Sharing library cache
+
 To show the location if we are in a symbolic link
-$ pwd -P
+
+```console
+pwd -P
+```
+
 Additional configuration files (extensions)
-$ cd /etc/ld.so.conf.d
-Independent locations where libraries can be load
-LD_LIBRARY_PATH
-Update library cache to use the modules
-/etc/ld.so.cache
+
+```console
+cd /etc/ld.so.conf.d
+```
+
+Independent locations where libraries can be load: `LD_LIBRARY_PATH`
+
+Update library cache to use the modules:  `/etc/ld.so.cache`
+
 To be able to write the cache file
-$ ldconfig -p
-# ldconfig
+
+```console
+ldconfig -p
+ldconfig
+```
 
 # 10 - SCHEDULING TASKS IN LINUX
-* Simple shell scripts
+
+## Simple shell scripts
+
 mail script
+
+```console
 #!/usr/bin/bash - shebang (for starting the file)
 FILE=/tmp/df.txt - variable
 df -h > $FILE
 mail -s "df" tux < $FILE && rm $FILE (&& makes that the second half executes only if the first part succeeds)
-* Scheduling tasks with crond
+```
+
+## Scheduling tasks with crond
+
 Check if crond is running
-# systemctl status crond
+
+```console
+systemctl status crond
 /etc/crontab
 /etc/cron.d (within this file we can put files formated in the same way
+```
 Cron directories
-$ ls /etc/cron*
+
+```console
+ls /etc/cron*
+```
+
 To see the crontab
+
+```console
 vi /etc/crontab
 crontab -l
+```
+
 Edit
+
+```console
 crontab -e
+```
+
 Remove completely 
+
+```console
 crontab -r
+```
+
 Populate MAILTO to have output mailed to the user. 
+
 For configuring cron:
+```console
 minute hour day-of-month month day-of-week
-* Using anacron as a Job Scheduler
+```
+
+## Using anacron as a Job Scheduler
+
 Schedule jobs with a delay in minutes after the system starts
+
+```console
 /etc/anacrontab
+```
+
 Format: period delay job-id command
-* Irregular Job Scheduling with at
-# systemctl status atd
-# at noon 
-By default everybody is allowed to execute at but those listed in /etc/cron.deny. If there is an allow file, only those people can execute at
+
+## Irregular Job Scheduling with at
+
+```console
+systemctl status atd
+```
+
+```console
+ at noon 
+ ```
+ 
+By default everybody is allowed to execute at but those listed in `/etc/cron.deny`. If there is an allow file, only those people can execute at 
 Check if service is running
-# systemctl status atd
-$ at 17.45 23 May 2018
+
+```console
+systemctl status atd
+at 17.45 23 May 2018
+```
+
 List jobs with
-$ atd
+```console
+atd
+```
+
 Remove jobs
-$ atrm
+```console
+atrm
+```
 
 # 11 - LOG FILES AND LOGROTATE
 
