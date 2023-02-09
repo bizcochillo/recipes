@@ -34,6 +34,13 @@ Add other utilities
 ```console
 yum install -y redhat-lsb-core net-tools epel-release kernel-headers kernel-devel
 ```
+- `redhat-lsb-core`: The Linux Standard Base (LSB) Core module support provides the fundamental
+system interfaces, libraries, and runtime environment upon which all conforming
+applications and libraries depend. [https://wiki.linuxfoundation.org/lsb/start]
+- `net-tools`:
+- `epel-release`:
+- `kernel-headers`:
+- `kernel-devel`:
 
 To install group of packages. 
 
