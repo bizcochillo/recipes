@@ -29,7 +29,7 @@ Update software
 sudo yum udpate
 ```
 
-Add other utilities
+Add other utilities. Information provided below with `yum info <package-name>`
 
 ```console
 yum install -y redhat-lsb-core net-tools epel-release kernel-headers kernel-devel
@@ -37,10 +37,10 @@ yum install -y redhat-lsb-core net-tools epel-release kernel-headers kernel-deve
 - `redhat-lsb-core`: The Linux Standard Base (LSB) Core module support provides the fundamental
 system interfaces, libraries, and runtime environment upon which all conforming
 applications and libraries depend. [https://wiki.linuxfoundation.org/lsb/start]
-- `net-tools`:
-- `epel-release`:
-- `kernel-headers`:
-- `kernel-devel`:
+- `net-tools`: The net-tools package contains basic networking tools, including ifconfig, netstat, route, and others. Most of them are obsolete. For replacement check iproute package.
+- `epel-release`: This package contains the Extra Packages for Enterprise Linux (EPEL) repository GPG key as well as configuration for yum.
+- `kernel-headers`: Kernel-headers includes the C header files that specify the interface between the Linux kernel and userspace libraries and programs.  The header files define structures and constants that are needed for building most standard programs and are also needed for rebuilding the glibc package.
+- `kernel-devel`: This package provides kernel headers and makefiles sufficient to build modules against the kernel package.
 
 To install group of packages. 
 
