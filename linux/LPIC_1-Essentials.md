@@ -311,7 +311,7 @@ sudo yum install ntp
 To match with a whole workd 'server'
 
 ```console
-grep '\bserver\b' ntp.conf
+grep '\bserver\b' /etc/ntp.conf
 ```
 
 ## Using sed to Edit files
@@ -319,13 +319,13 @@ grep '\bserver\b' ntp.conf
 To see output when sed is executed
 
 ```console
-sed '/^#/d ; /^$/d' ntp.conf
+sed '/^#/d ; /^$/d' /etc/ntp.conf
 ```
 
 To actually edit the file (add parameter -i)
 
 ```console
-sed -i '/^#/d ; /^$/d' ntp.conf 
+sed -i '/^#/d ; /^$/d' /etc/ntp.conf 
 ```
 
 ## Comparing files
