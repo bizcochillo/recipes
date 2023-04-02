@@ -123,7 +123,7 @@ For checking Debian-like user scripts, we notice than in CentOS systems, the scr
 
 Change the default timeout for sudo, we issue `sudo visudo` and set the line `Defaults        timestamp_timeout=<here_your_timeout>`
  
-To see password hashed in the system on the file `/etc/shadow`. To change the password on linux system, use chpasswd with the standard input. 
+To see password hashed in the system on the file `/etc/shadow`. To change the password on linux system, use chpasswd with the standard input to enable, for instance, batch user creation.
  
 ```console
  echo 'user2:Password1' | sudo chpasswd
@@ -216,9 +216,54 @@ The `-r` modifier will take care of the deletion of user home directory, mail sp
 ```console
 sudo find /home -uid 1002 -delete
 ```
- 
+
 # 04 - MANAGING LOCAL GROUPS IN CentOS7
 
+## Creating local groups
+
+We can read the local group file as: 
+ 
+```console
+grep tux /etc/group
+```
+ 
+To change the primary group to `wheel`, we issue the command -switching group id- `newgrp wheel`. In CentOS and RH system groups are private by default. When we create a new file, the group shown will be `wheel`
+ 
+To create a new group, we use the command groupadd. 
+
+```console
+sudo groupadd sales
+```
+
+We have the password file for groups at `/etc/gshadow`. Generally, groups does not have password. We have the similar set of programs for managing groups `groupadd`, `groupmod` and `groupdel`  
+ 
+## Manage Group Membership
+
+We can modify the secondary group membership of the user with `usermod -G`, but we need to specify all the groups the user belongs to. For instance:
+ 
+```console
+sudo usermod -G sales,wheel tux
+```
+
+It's possible to add an user to a group with the command `gpasswd` with the modifier `-a`. This is not the most obvious thing to do: 
+ 
+```console
+sudo gpasswd -a tux sales
+```
+ 
+For adding more than one user with the command, we can specify a list: 
+ 
+```console
+sudo gpasswd -M tux,root sales
+```
+
+To see the actual list of group membership with id, it's mandatory to login again. 
+
+## Making use of the SGID permission
+
+Setting the Group ID bit. 
+
+## Group password
  
 # 05 - USING PAM TO CONTROL USER ACCESS
 
