@@ -406,7 +406,7 @@ The file structure.ldif created:
 dn: dc=example,dc=com
 dc: example
 objectClass: top
-objectClasS: domain
+objectClass: domain
 
 dn: ou=people,dc=example,dc=com
 ou: people
