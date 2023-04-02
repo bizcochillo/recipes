@@ -287,8 +287,6 @@ To enable a group to have password, we issue the command `newgrp adm`. We can ha
 # 05 - USING PAM TO CONTROL USER ACCESS
  
 How to control user access to resources. 
-
-# 06 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
  
 ## Automating home directory creation at user login
 
@@ -324,7 +322,9 @@ This module reads then the configuration on the `/etc/security/time.conf` file, 
 ```console
 *;*;tux|bob;!Wk0800-1800
 ``` 
-
+ 
+# 06 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
+ 
 # 07 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
  
 # 08 - IMPLEMENTING OpenLDAP AUTHENTICATION ON CentOS7
