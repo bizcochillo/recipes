@@ -461,4 +461,194 @@ ldapadd -x -W -D "cn=Manager,dc=example,dc=com" -f user.ldif
 
 # 07 - IMPLEMENTING OpenLDAP AUTHENTICATION ON CentOS7
 
+## Installing OpenLDAP client
+
+On server2, first, for configuring access to the server, we set the alias in hosts file and install oddjob for automatically creating the home directory and start it.  
+ 
+```console
+echo "192.168.56.105 server1.example.com" >> /etc/hosts
+yum install oddjob oddjob-mkhomedir
+systemctl enable oddjobd
+systemctl start oddjobd
+```
+
+After, we install openLDAP clients
+
+```console
+yum install openldap-clients.x86-64 nss-pam-ldapd
+```
+ 
+We can either to configure the openLDAP client via a GUI or via command line
+
+GUI: 
+
+ ```console
+authconfig-tui
+```
+ 
+Command line: 
+
+```console
+authconfig --enableldap --ldapserver=server1.example.com --ldapbasedn="dc=example,dc=com" --enablemkhomedir --update
+```
+
+## Listing users and groups
+
+ If we issue `grep ldap /etc/nsswitch.conf` we see that ldap is enabled for users, groups, shadow, etc. We can remove the ldap from automount here. 
+ 
+## Searching LDAP users
+
+To search from server2 the ldap directory, we issue: 
+
+```console
+ldapsearch -x -H ldap://server1.example.com -b dc=example,dc=com
+```
+ 
+And to reduce the metadata queried, we can add the `-LLL` modifier:
+
+```console
+ldapsearch -x -LLL -H ldap://server1.example.com -b dc=example,dc=com
+```
+
+For only search for objectclass of type accounts
+
+```console
+ldapsearch -x -LLL -H ldap://server1.example.com -b dc=example,dc=com "(objectclass=account)"
+```
+
+For combining searchs
+
+```console
+ldapsearch -x -LLL -H ldap://server1.example.com -b dc=example,dc=com "(&(objectclass=account)(uid=fred))"
+```
+ 
+For bringing only the attributes uidNumber and uid:
+ 
+```console
+ldapsearch -x -LLL -H ldap://server1.example.com -b dc=example,dc=com "(&(objectclass=account)(uid=fred))" uidNumber uid
+```
+ 
+It's possible to create new ldap users by redirecting the output to a new file, changing the values and issuing a ldapadd command like the following
+
+```console
+ldapsearch -x -LLL -H ldap://server1.example.com -b dc=example,dc=com "(&(objectclass=account)(uid=fred))" > newuser.ldif
+ldapadd -x -W -D cn=Manager,dc=example,dc=com -f newuser.ldif
+getent passwd # will show the new entry for the new user
+``` 
+ 
 # 08 - IMPLEMENTING KERBEROS AUTHENTICATION
+
+## Configuring NTP
+
+We will work on server1 and server2. On server1 we will configure an external source for NTP and server2 will pick the time from server1. 
+
+To install ntp issue the yum command `yum install -y ntp` and restrict the local network signaling by changing the /etc/ntp.conf file by adding the line
+
+```console
+restrict 192.168.56.0 mask 255.255.255.0 nomodify notrap
+```
+
+To enable, query and configuring the firewall: 
+ 
+```console
+systemctl enable ntpd
+systemctl start ntpd
+ntpq -p
+firewall-cmd --add-service=ntp --permanent
+firewlal-cmd --reload
+```
+
+On server2 we need to install, enable and configure the ntp server to point to `server1.example.com`. For doing this, we need to remove amost all server lines on the `/etc/ntp.conf` configuration file and add
+ 
+```console
+server server1.example.com iburst prefer
+```
+
+With ntpq -p we can check that the time is taken from server1
+ 
+## Install and configure KDC
+
+To install a random number generator issue `yum install -y rng-tools.x86_64`. We must enable and start the service.
+
+```console
+systemctl enable rngd
+systemctl start rngd 
+```
+ 
+Afterwards, we need to install Kerberos client, server and the PAM:
+
+```console
+yum install -y krb5-server krb5-workstation pam_krb5
+```
+ 
+In the kerberos key distribution directory we configure the realm `example.com`. Files are in the `/var/kerberos/krb5kdc`. The file for indicating where the server is located is `kdc.conf`. To configure the client to set the realm, the file is located in `/etc/krb5.conf`. 
+ 
+We create the realm files 
+
+```console
+kdb5_util create -s -r EXAMPLE.COM 
+```
+
+We need to enable and start the services `krb5kdc` and `kadmin`
+
+```console
+system enable krb5kdc kadmin
+system start krb5kdc kadmin
+```
+  
+## Enable SSH Kerberos authentication
+
+To add the firewall settings to kerberos ports: 
+
+```console
+firewall-cmd --add-service=kpasswd --permanent
+firewall-cmd --add-service=kerberos --permanent
+firewall-cmd --add-port=749/tcp --permanent 
+```
+ 
+On kerberos, to add principals and list them: 
+
+```console
+kadmin.local
+.. 
+kadmin.local: listprincs
+.. 
+kadmin.local: addprinc root/admin
+..
+kadmin.local: addprinc tux
+..
+kadmin.local: addprinc -randkey host/server1.example.com
+..
+ktadd host/server1.example.com
+..
+quit
+``` 
+
+## Authenticating via SSH
+
+We need to change the ssh configuration (file `/etc/ssh/ssh_config`) the lines: 
+ 
+```console
+GSSAPIAuthentication yes
+GSSAPIDelegateCredentials yes
+```
+ 
+Reload the ssh service with `systemctl reload sshd` and update the config to enalbe kerberos
+
+```console
+authconfig --enablekrb5 --update
+```
+ 
+To see the list, issue `klist` and to create a token issue `kinit`. We can present this key to services which accept this kind of authentication. If we want to destroy the key, issue `kdestroy`
+ 
+## Add additional hosts
+
+We need to add the record for the server in `/etc/hosts` and install the client and copy the client configuration from server1
+
+```console
+yum install -y krb5-workstation pam_krb5
+scp tux@server1.example.com:/etc/krb5.conf /etc
+kadmin
+```
+
+In kerberos we add the host and the keytab for server2. We need to do the same for SSH and for the authconfig module, and thereafter, reload the ssh daemon. Afterwards, the process is the same for requesting, using and destroying a keyh. 
