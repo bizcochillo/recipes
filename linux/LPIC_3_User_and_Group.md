@@ -121,14 +121,105 @@ For checking Debian-like user scripts, we notice than in CentOS systems, the scr
 
 ## Managing User Passwords
 
+Change the default timeout for sudo, we issue `sudo visudo` and set the line `Defaults        timestamp_timeout=<here_your_timeout>`
+ 
+To see password hashed in the system on the file `/etc/shadow`. To change the password on linux system, use chpasswd with the standard input. 
+ 
+```console
+ echo 'user2:Password1' | sudo chpasswd
+ ```
+
+ For RH systems we can use the `--stdin` flag with the `passwd` command as:  
+ 
+ ```console
+ echo 'user2:Password1' | sudo passwd user3 --stdin
+ ```
+ 
 ## Password Age Data
+ 
+In the `/etc/shadow` we see the aging information
+ 
+To change the password expiry information, we use the command `chage`, for instance, for listing the info:
+ 
+```console
+chage -l tux
+```
+
+For not storing the password in the shadow file, but in the passwd file instead, issue the command `pwunconv`:
+
+```console
+sudo pwunconv
+```
+
+All users can read the file. With the shadow file, it can keep private to users and only for the root user. To convert it back to shadow data, issue: 
+
+```console
+sudo pwconv
+```
+ 
+To change the expiry time of the password of an user, issue: 
+
+```console
+sudo chage -M 40 user1
+```
+ 
+Locking an account, issue the command
+
+```console
+sudo passwd -l user1
+```
+ 
+By inspecting the shadow file, we can observe that the exclamation before the password hash is now present. 
+ 
+To unlock the account
+ 
+```console
+sudo passwd -u user1
+```
 
 ## Account Defaults
 
+To see the defaults file inspect the file `/etc/login.defs`. 
+ 
+PAM stands for Pluggable Authentication Module. To show the defaults, we also can issue the command `sudo useradd -D`. If we want to change the default shell for new users, we issue the command: 
+ 
+```console
+sudo useradd -Ds /bin/sh
+```
+ 
+The defaults file is located at `/etc/default/useradd`. Therefore, defaults can be changed directly by editing this file. 
+
 ## Modify and Delete Accounts
 
+For instance to modify user to add the full name, we issue:
+ 
+```console
+sudo usermod -C "User One" user1
+```
+
+For listing the available shells: 
+
+```console
+chsh -l
+```
+
+For change my own shell: `chsh -s /bin/sh tux`. We can check it at `grep tux /etc/passwd`. To change again with usermod we issue `sudo usermod -s /bin/bash`. We issue it with the modifier `-s`.
+ 
+For deleting an user, we issue the command 
+ 
+```console
+sudo userdel -r user1
+```
+ 
+The `-r` modifier will take care of the deletion of user home directory, mail spool and cron jobs. It does not search in the file system for files owned by the deleted user. Once a user is deleted and the deletion has not been performed with the `-r` modifier, we can delete files via the user ID in the file system by scrapping it with find, like
+ 
+```console
+sudo find /home -uid 1002 -delete
+```
+ 
 # 04 - MANAGING LOCAL GROUPS IN CentOS7
 
+ 
 # 05 - USING PAM TO CONTROL USER ACCESS
 
 # 06 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
