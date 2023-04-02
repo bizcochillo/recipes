@@ -324,9 +324,141 @@ This module reads then the configuration on the `/etc/security/time.conf` file, 
 ``` 
  
 # 06 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
- 
-# 07 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
- 
-# 08 - IMPLEMENTING OpenLDAP AUTHENTICATION ON CentOS7
 
-# 09 - IMPLEMENTING KERBEROS AUTHENTICATION
+The goal is to configure an LDAP Server to support centralized login
+ 
+## Install OpenLDAP
+
+We need to make sure that the fully qualified name gets resolved, so, hostname to ensure we have the domain configured and add the host ip to the host file like `echo "my_ip_address server1.example.com"`. Afterwards, we need to put the firewall exception and install openldap: 
+ 
+```console
+firewall-cmd --permanent --add-service=ldap
+firewall-cmd --reload
+yum install -y openldap openldap-clients openldap-servers migrationtools.noarch
+```
+
+With the migration tools, we can take the users present in the `/etc/passwd` file and create them in the open LDAP directory
+
+## Configure OpenLDAP
+
+First, we can pick the example configuration to put in the proper directory:
+ 
+```console
+cp /usr/share/openldap-servers/DB_CONFIG.example /var/lib/ldap/DB_CONFIG
+```
+
+We can check the configuration with `slaptest`. To check that the DB files are correctly set with the right owner (ldap user, ldap group) and enable/start the service, we issue:
+ 
+```console
+chown ldap.ldap /var/lib/ldap/*
+systemctl enable slapd
+systemctl start slapd
+```
+
+To add entries to the schema
+ 
+```console
+cd /etc/openldap/schema/
+ldapadd -Y EXTERNAL -H ldap:/// -D "cn=config" -f cosine.ldif
+ldapadd -Y EXTERNAL -H ldap:/// -D "cn=config" -f nis.ldif 
+```
+ 
+For changing the configuration, we create a config.ldif file with the following content: 
+
+```console
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=example,dc=com
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=Manager,dc=example,dc=com
+
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: {SSHA}hETVGKh8af1csLNzpCVfwhBX7n5yahbY
+
+dn: cn=config
+changetype: modify
+replace: olcLogLevel
+olcLogLevel: 0
+
+dn:olcDatabase={1}monitor,cn=config
+changetype: modify
+replace:olcAccess
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" read by dn.base="cn=Manager,dc=example,dc=com" read by * none
+```
+
+And issue the command 
+ 
+```console
+ldapmodify -Y EXTERNAL -H ldapi:/// -f config.ldif
+``` 
+ 
+## Create directory structure
+
+The file structure.ldif created: 
+
+```console
+dn: dc=example,dc=com
+dc: example
+objectClass: top
+objectClasS: domain
+
+dn: ou=people,dc=example,dc=com
+ou: people
+objectClass: top
+objectClass: organizationalUnit
+ 
+dn: ou=group,dc=example,dc=com
+ou: group
+objectClass: top
+objectClass: organizationalUnit
+```
+
+And then we issue the command to create the objects: 
+ 
+```console
+ldapadd -x -W -D "cn=Manager,dc=example,dc=com" -f structure.ldif
+```
+ 
+To search the ldap directory: 
+ 
+```console
+ldapsearch -x -W -D "cn=Manager,dc=example,dc=com" -b "dc=example,dc=com" -s sub "(objectclass=organizationalUnit)"
+```
+ 
+## Create groups and users
+
+We create a LDAP object upon the file group.ldif to host all LDAP users and then, we will use the migration tool. The `group.ldif` file:
+ 
+```console
+dn: cn=ldapusers,ou=group,dc=example,dc=com
+objectClass: posixGroup
+cn: ldapusers
+gidNumber: 4000
+```
+
+To create the object:
+
+```console
+ ldapadd -x -W -D "cn=Manager,dc=example,dc=com" -f group.ldif
+```
+
+Where the migration tool is located is in the folder `/usr/share/migrationtools/`. There we edit the file `migrate_common.ph` (variables `DEFAULT_MAIL_DOMAIN` and `DEFAULT_BASE`).
+
+When using the password migration, we can use the tux as template 
+ 
+```console
+grep tux  /etc/passwd
+/usr/share/migrationtools/migrate_passwd.pl passwd user.ldif
+vi user.ldif   #edit the file to comply with the LDAP directory standards
+ldapadd -x -W -D "cn=Manager,dc=example,dc=com" -f user.ldif
+```
+
+# 07 - IMPLEMENTING OpenLDAP AUTHENTICATION ON CentOS7
+
+# 08 - IMPLEMENTING KERBEROS AUTHENTICATION
