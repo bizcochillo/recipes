@@ -453,7 +453,7 @@ Where the migration tool is located is in the folder `/usr/share/migrationtools/
 When using the password migration, we can use the tux as template 
  
 ```console
-grep tux  /etc/passwd
+grep tux  /etc/passwd > passwd
 /usr/share/migrationtools/migrate_passwd.pl passwd user.ldif
 vi user.ldif   #edit the file to comply with the LDAP directory standards
 ldapadd -x -W -D "cn=Manager,dc=example,dc=com" -f user.ldif
