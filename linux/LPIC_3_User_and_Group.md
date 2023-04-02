@@ -261,14 +261,72 @@ To see the actual list of group membership with id, it's mandatory to login agai
 
 ## Making use of the SGID permission
 
-Setting the Group ID bit. 
+Setting the Group ID bit. With the Apache server installed, we inspect the permissions and groups of the apache server (configuration DocumentRoot at `/etc/httpd/conf/httpd.conf`) and set to `/var/www/html` folder. To change the group membership recursive for the Apache folder we issue: 
+ 
+```console
+sudo chgrp -R apache /var/www
+```
+ 
+To remove other permissions: 
+ 
+```console
+sudo chmod -R o= /var/www
+```
+
+To enable the special flag permission on the group level, we modify the permissions g+s on the current folder to have new content be created under the owning group membership
+ 
+```console
+chmod g+s .
+umask 027
+``` 
 
 ## Group password
  
+To enable a group to have password, we issue the command `newgrp adm`. We can have an user accessing to other permission set granted by group membership. 
+ 
 # 05 - USING PAM TO CONTROL USER ACCESS
+ 
+How to control user access to resources. 
 
 # 06 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
+ 
+## Automating home directory creation at user login
 
-# 07 - IMPLEMENTING OpenLDAP AUTHENTICATION ON CentOS7
+Some PAM configuration locations are in `/etc/pam.d/` folder. The programs used by PAM are in `/lib64/security/`. On `/etc/security` we can start to configure some of the modules. The three locations work together to provide secure access management. 
+ 
+In RH we check that we have the oddjob module for PAM: `rpm -qa | grep oddjob`. We need to enable and start the oddjob daemon and the auth module: 
+ 
+```console
+sudo yum install oddjob
+systemctl enable oddjobd
+systemctl start oddjob
+sudo authconfig --enablemkhomedir --update
+```
 
-# 08 - IMPLEMENTING KERBEROS AUTHENTICATION
+## Impelementing password policies
+ 
+To see which policy applies, see `cat /etc/pam.d/system-auth`. Check the file `/etc/security/pwquality.conf`. We can fine tune those files to increase the password health. To see the password score, issue `pwscore`. The score is between 0 and 100. 
+
+## Restricting or limiting access to resources
+ 
+File `/etc/security/limits.conf` to set limits on the system. The file is well self-documented. 
+ 
+## Adding login time restrictions
+
+Control access during the day, for instance. At the directory `/etc/pam.d` we can configure. By addin a line like 
+ 
+```console
+account   required    pam_time.so
+```
+
+This module reads then the configuration on the `/etc/security/time.conf` file, which is also well-documented. For instance, for not allowing access on workday between 8 and 18 for users bob and tux we add to the file the line:
+
+```console
+*;*;tux|bob;!Wk0800-1800
+``` 
+
+# 07 - IMPLEMENTING OpenLDAP DIRECTORIES ON CentOS7
+ 
+# 08 - IMPLEMENTING OpenLDAP AUTHENTICATION ON CentOS7
+
+# 09 - IMPLEMENTING KERBEROS AUTHENTICATION
