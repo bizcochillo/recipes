@@ -2,7 +2,7 @@
 
 ## Listing Block Storage
 
-To list disk blocks issue `lsblk`. `sr0` is the CD rom. `lvm` is a logical volume. swap is virtual memory. MAJ and MIN numbers are really important. Maj number indicated the version number of the driver that the kernel is using to access the disk. 
+To list disk blocks issue `lsblk`. `sr0` is the CD rom. `lvm` is a logical volume. swap is virtual memory. Major and minor numbers -MAJ and MIN- are really important. Maj number indicated the version number of the driver that the kernel is using to access the disk. 
 
 The driver allows up to 15 partitions per disk. No matter if we're using MBR partitions or GUI, that allows up to 128, but the limitation comes from the driver. 
 
