@@ -100,7 +100,7 @@ Backing up the MBR (dos label disk)
 dd if=/dev/sda count=1 bs=512 of=/root/sdb.mbr
 ```
 
-Example of partition scripted with parted
+Example of partition scripted with parted.
 
 ```console
 #!/bin/bash
