@@ -21,6 +21,8 @@ DISK ->
 
 File system on top partitions: ext2, ext3, ext4, ReiserFS, XFS, Btrfs
 
+`fdisk`, `gdisk` and `parted` are the typical tools to create partitions on a disk. `fdisk` is the traditional one. 
+
 ## Using fdisk to create partitions
 
 To list the partitions that are in a file disk 
@@ -35,7 +37,7 @@ To create a partition in interactive mode
 fdisk /dev/sdb
 ```
 
-Remove the partition by overwritting the partition root
+Remove the partition by overwriting the disk file. `if` is input file, zeros in our case. `of` is the output file, /dev/sdb in our case and the block size is 512 bytes. 
 
 ```console
 dd if=/dev/zero of=/dev/sdb count=1 bs=512
@@ -49,12 +51,18 @@ To create partitions with gdisk
 gdisk /dev/sdb
 ```
 
-There is a backup at the end of the disk (First 512 is the MBR, seconds 512 for the GPT headers, GPT partition for the 16K and the last 16K of the disk are the partition backup. 
+There is a backup at the end of the header (First 512 is the MBR, seconds 512 for the GPT headers, GPT partition for the 16K and the last 16K of the disk are the partition backup. 
+
+To wipe the disk, we need then to zero the two sectors 
+
+```console
+dd if=/dev/zero of=/dev/sdb count=2 bs=16K
+```
 
 ## Using GNU parted to create partitions
 
 ```console
-parted /dev/sdb printmk
+parted /dev/sdb print
 ```
 
 To create a label
@@ -91,6 +99,35 @@ Backing up the MBR (dos label disk)
 ```console
 dd if=/dev/sda count=1 bs=512 of=/root/sdb.mbr
 ```
+
+Example of partition scripted with parted
+
+```console
+#!/bin/bash
+DISK="/dev/sdb"
+# Create MBR partition table and extended partition across disk
+parted -s $DISK -- mklabel msdos mkpart extended 1m -1m
+
+#Create swap partition as partition 5 the first logical parition
+parted -s $DISK mkpart logical linux-swap 2m 100m #5
+
+parted -s $DISK mkpart logical 101m 200m #6
+parted -s $DISK mkpart logical 201m 300m #7
+parted -s $DISK mkpart logical 301m 400m #8
+parted -s $DISK mkpart logical 401m 500m #9
+
+#Create 3 more logical partitons for LVMs
+parted -s $DISK mkpart logical 501m 600m #10
+parted -s $DISK mkpart logical 601m 700m #11
+parted -s $DISK mkpart logical 701m 800m #12
+parted -s $DISK set 10 lvm on # set partition 10 to LVM
+parted -s $DISK set 11 lvm on # set partion 11 to LVM
+parted -s $DISK set 12 lvm on # set partition 12 to LVM
+
+#Create 2 more partions for RAID
+parted -s $DISK mkpart logical 801m 900m #13
+```
+
 
 ## Codes for partitions
 
